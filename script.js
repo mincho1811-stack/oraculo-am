@@ -1,26 +1,36 @@
 const palabras = [
-  "SÍ", "NO", "ESPERA", "CONFÍA", "AVANZA",
-  "OBSERVA", "SUELTA", "PERMITE"
+  "SÍ",
+  "NO",
+  "PERMITE",
+  "ESPERA",
+  "CONFÍA",
+  "OBSERVA",
+  "AVANZA",
+  "SUELTA"
 ];
 
-document.getElementById("consultar").addEventListener("click", () => {
-  const r = palabras[Math.floor(Math.random() * palabras.length)];
-  document.getElementById("respuesta").innerText = r;
-});
+const boton = document.getElementById("consultar");
 const respuesta = document.getElementById("respuesta");
-respuesta.style.opacity = 0;
 
-setTimeout(() => {
-  respuesta.innerText = r;
-  respuesta.style.opacity = 1;
-}, 300);
-const hoy = new Date().toDateString();
-const ultima = localStorage.getItem("ultimaConsulta");
+boton.addEventListener("click", () => {
+  const hoy = new Date().toDateString();
+  const ultima = localStorage.getItem("ultimaConsulta");
 
-if (ultima === hoy) {
-  document.getElementById("respuesta").innerText =
-    "El Oráculo ya habló hoy. Regresa mañana.";
-  return;
-}
+  if (ultima === hoy) {
+    respuesta.innerText = "El Oráculo ya habló hoy. Regresa mañana.";
+    respuesta.style.opacity = 1;
+    return;
+  }
 
-localStorage.setItem("ultimaConsulta", hoy);
+  const r = palabras[Math.floor(Math.random() * palabras.length)];
+
+  respuesta.style.opacity = 0;
+
+  setTimeout(() => {
+    respuesta.innerText = r;
+    respuesta.style.opacity = 1;
+  }, 300);
+
+  localStorage.setItem("ultimaConsulta", hoy);
+});
+
