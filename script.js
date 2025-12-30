@@ -22,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (ultima === hoy) {
       respuesta.innerText = "EL ORÁCULO YA HABLÓ HOY. REGRESA MAÑANA.";
       respuesta.style.opacity = 1;
+      boton.disabled = true;
+      boton.style.opacity = 0.4;
+      boton.style.cursor = "not-allowed";
       return;
     }
 
