@@ -1,36 +1,41 @@
-const palabras = [
-  "SÍ",
-  "NO",
-  "PERMITE",
-  "ESPERA",
-  "CONFÍA",
-  "OBSERVA",
-  "AVANZA",
-  "SUELTA"
-];
+document.addEventListener("DOMContentLoaded", () => {
 
-const boton = document.getElementById("consultar");
-const respuesta = document.getElementById("respuesta");
+  const palabras = [
+    "SÍ",
+    "NO",
+    "PERMITE",
+    "ESPERA",
+    "CONFÍA",
+    "OBSERVA",
+    "AVANZA",
+    "SUELTA"
+  ];
 
-boton.addEventListener("click", () => {
-  const hoy = new Date().toDateString();
-  const ultima = localStorage.getItem("ultimaConsulta");
+  const boton = document.getElementById("consultar");
+  const respuesta = document.getElementById("respuesta");
 
-  if (ultima === hoy) {
-    respuesta.innerText = "El Oráculo ya habló hoy. Regresa mañana.";
-    respuesta.style.opacity = 1;
-    return;
-  }
+  boton.addEventListener("click", () => {
 
-  const r = palabras[Math.floor(Math.random() * palabras.length)];
+    const hoy = new Date().toDateString();
+    const ultima = localStorage.getItem("ultimaConsulta");
 
-  respuesta.style.opacity = 0;
+    if (ultima === hoy) {
+      respuesta.innerText = "EL ORÁCULO YA HABLÓ HOY. REGRESA MAÑANA.";
+      respuesta.style.opacity = 1;
+      return;
+    }
 
-  setTimeout(() => {
-    respuesta.innerText = r;
-    respuesta.style.opacity = 1;
-  }, 300);
+    const r = palabras[Math.floor(Math.random() * palabras.length)];
 
-  localStorage.setItem("ultimaConsulta", hoy);
+    respuesta.style.opacity = 0;
+
+    setTimeout(() => {
+      respuesta.innerText = r;
+      respuesta.style.opacity = 1;
+    }, 300);
+
+    localStorage.setItem("ultimaConsulta", hoy);
+  });
+
 });
 
