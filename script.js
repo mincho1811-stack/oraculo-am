@@ -14,3 +14,13 @@ setTimeout(() => {
   respuesta.innerText = r;
   respuesta.style.opacity = 1;
 }, 300);
+const hoy = new Date().toDateString();
+const ultima = localStorage.getItem("ultimaConsulta");
+
+if (ultima === hoy) {
+  document.getElementById("respuesta").innerText =
+    "El Oráculo ya habló hoy. Regresa mañana.";
+  return;
+}
+
+localStorage.setItem("ultimaConsulta", hoy);
