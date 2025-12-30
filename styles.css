@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  font-family: 'Georgia', serif;
+  background: linear-gradient(180deg, #1b1f3b, #2e1a47);
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.oraculo {
+  max-width: 500px;
+  text-align: center;
+  padding: 2rem;
+}
+
+button {
+  background: #6a5acd;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 1.5rem;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+#respuesta {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+}
