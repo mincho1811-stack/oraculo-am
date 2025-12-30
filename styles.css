@@ -31,5 +31,7 @@ button:hover {
 
 #respuesta {
   margin-top: 2rem;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  opacity: 0;
+  transition: opacity 1.2s ease;
 }
