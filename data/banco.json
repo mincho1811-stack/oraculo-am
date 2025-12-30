@@ -1,0 +1,90 @@
+{
+  "palabras": [
+    "SÍ",
+    "NO",
+    "TAL VEZ",
+    "ESPERA",
+    "AVANZA",
+    "CONFÍA",
+    "SUELTA",
+    "OBSERVA",
+    "PERMITE",
+    "ACEPTA",
+    "SILENCIO",
+    "TIEMPO",
+    "UMBRAL",
+    "CAMINO",
+    "ECO",
+    "NIEBLA",
+    "LÍMITE",
+    "CENTRO",
+    "PORTAL",
+    "ORIGEN"
+  ],
+
+  "sensoriales": {
+    "colores": [
+      "Violeta",
+      "Azul profundo",
+      "Blanco",
+      "Índigo",
+      "Negro suave"
+    ],
+    "aromas": [
+      "Incienso",
+      "Mirra",
+      "Sándalo",
+      "Chanel"
+    ],
+    "sabores": [
+      "Amargo",
+      "Dulce tenue",
+      "Metálico",
+      "Neutro"
+    ]
+  },
+
+  "numeros": [
+    "Uno",
+    "Dos",
+    "Tres",
+    "Cuatro",
+    "Cinco",
+    "Seis",
+    "Siete",
+    "Ocho",
+    "Nueve",
+    "Diez",
+    "Once",
+    "Doce",
+    "Trece",
+    "Catorce",
+    "Quince",
+    "Dieciséis",
+    "Diecisiete",
+    "Dieciocho",
+    "Diecinueve",
+    "Veinte",
+    "Veintiuno",
+    "Veintidós"
+  ],
+
+  "frases_cortas": [
+    "No es el momento.",
+    "Todo llega.",
+    "La respuesta ya está en ti.",
+    "Aún no.",
+    "Observa antes de actuar.",
+    "Lo esencial no hace ruido.",
+    "No fuerces la señal.",
+    "Hay más de una verdad."
+  ],
+
+  "frases_largas": [
+    "Lo que buscas no se revela cuando insistes, sino cuando permites.",
+    "La respuesta llegará cuando sueltes la necesidad de control.",
+    "Este no es un final, es una pausa necesaria.",
+    "El silencio también es una forma de respuesta.",
+    "No todo lo verdadero necesita ser entendido ahora."
+  ]
+}
