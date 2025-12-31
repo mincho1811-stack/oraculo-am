@@ -9,6 +9,7 @@
 
   <main class="oraculo">
     <h1>Oráculo AM</h1>
+    <h2 class="subtitulo">Anima Mundi</h2>
 
     <p class="ritual">
       Respira.<br>
@@ -18,31 +19,39 @@
 
     <p class="preparacion">
       Formula una sola pregunta.<br>
-      No busques la respuesta que deseas.<br>
-      Permite que llegue la respuesta.
+      Puedes escribirla o mantenerla clara en tu mente.<br>
+      <em>La pregunta nunca se guarda.</em>
     </p>
+
+    <div class="pregunta">
+      <input
+        type="text"
+        id="pregunta"
+        placeholder="(Opcional) Escribe tu pregunta aquí"
+        autocomplete="off"
+      >
+    </div>
 
     <div class="consulta">
       <button id="consultar">Consultar</button>
       <div id="respuesta"></div>
     </div>
 
-<p class="donacion-texto">
-  Si deseas agradecer, el Oráculo acepta aportes conscientes.
-</p>
-    
-   <footer>
-  <p>
-    © Oráculo AM —
-    <a href="https://ko-fi.com/oraculoam" target="_blank">
-      Aportes conscientes
-    </a>
-  </p>
-</footer>
+    <div class="donaciones">
+      <a
+        href="https://ko-fi.com/oraculoam"
+        target="_blank"
+        class="boton-donacion"
+      >
+        Aportes conscientes
+      </a>
+    </div>
 
+    <footer>
+      <p>© Oráculo AM</p>
+    </footer>
   </main>
 
-  <!-- MUY IMPORTANTE: el script SIEMPRE al final -->
   <script src="script.js"></script>
 </body>
 </html>
