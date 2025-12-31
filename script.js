@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const boton = document.getElementById("consultar");
   const respuesta = document.getElementById("respuesta");
+  const pregunta = document.getElementById("pregunta");
 
   let banco = null;
 
@@ -23,10 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!banco) {
-      respuesta.innerText = "El Oráculo está en silencio.";
+      respuesta.innerText = "El Oráculo permanece en silencio.";
       respuesta.style.opacity = 1;
       return;
     }
+
+    // La pregunta NO se guarda
+    pregunta.value = "";
 
     respuesta.style.opacity = 0;
 
@@ -75,4 +79,3 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
-
