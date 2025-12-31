@@ -37,6 +37,19 @@
       <div id="respuesta"></div>
     </div>
 
+    <script>
+  const textarea = document.getElementById("pregunta");
+
+  function limpiarPregunta() {
+    if (textarea) {
+      textarea.value = "";
+    }
+  }
+
+  // Limpia la pregunta al recargar o cerrar
+  window.addEventListener("beforeunload", limpiarPregunta);
+</script>
+    
 <section id="proximamente-pro"></section>
 <section id="sobre-oraculo"></section>
 <section id="homenaje-eb"></section>
@@ -62,9 +75,9 @@
 </section>
 
 <section id="sobre-oraculo" class="section">
-  <h2>Sobre Oráculo AM</h2>
+  <h2>Sobre El Oráculo AM - Anima Mundi</h2>
   <p>
-    Oráculo AM es una herramienta simbólica de introspección.
+    El Oráculo AM es una herramienta simbólica de introspección.
     No predice, no impone y no decide por ti.
   </p>
   <p>
