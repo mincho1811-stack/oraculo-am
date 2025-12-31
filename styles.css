@@ -33,6 +33,12 @@ body {
   align-items: center;
 }
 
+.donacion-texto {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
 button {
   background: #6a5acd;
   color: white;
