@@ -201,20 +201,12 @@ button:hover {
   text-decoration: none;
   color: inherit;
   transition: all 0.3s ease;
-   opacity: 0.9;
+   opacity: 1.2;
 }
 
 .btn-aporte:hover {
   background: rgba(255,255,255,0.1);
-  opacity: 1;
-}
-
-.boton-kofi {
-  opacity: 0.9;
-}
-
-.boton-kofi:hover {
-  opacity: 1;
+  opacity: 2;
 }
 
 @media (max-width: 600px) {
