@@ -217,6 +217,47 @@ button:hover {
   opacity: 1;
 }
 
+.version-pro {
+  margin: 6rem auto;
+  max-width: 800px;
+  text-align: center;
+}
+
+.version-pro h2 {
+  margin-bottom: 1.5rem;
+}
+
+.pro-intro {
+  opacity: 0.9;
+  margin-bottom: 3rem;
+}
+
+.pro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.pro-grid h3 {
+  margin-bottom: 1rem;
+}
+
+.pro-grid ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pro-grid li {
+  margin: 0.5rem 0;
+  opacity: 0.85;
+}
+
+.pro-note {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
 @media (max-width: 600px) {
   .section {
     margin: 60px auto;
