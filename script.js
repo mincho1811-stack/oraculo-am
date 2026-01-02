@@ -48,6 +48,9 @@ fetch("data/tarot.json")
     localStorage.setItem("ultimaConsulta", hoy);
   });
 
+  const contenedor = document.getElementById("ritual-contenedor");
+contenedor.classList.add("silencio");
+
   function generarRespuesta() {
 
     const tipos = [
