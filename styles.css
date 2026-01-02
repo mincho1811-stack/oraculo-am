@@ -209,6 +209,14 @@ button:hover {
   opacity: 1;
 }
 
+.boton-kofi {
+  opacity: 0.9;
+}
+
+.boton-kofi:hover {
+  opacity: 1;
+}
+
 @media (max-width: 600px) {
   .section {
     margin: 60px auto;
