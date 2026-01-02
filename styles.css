@@ -82,6 +82,29 @@ button:hover {
   opacity: 0.85;
 }
 
+.fade-out {
+  opacity: 1;
+  transition: opacity 1.2s ease;
+}
+
+.fade-out.hidden {
+  opacity: 0;
+}
+
+button {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+
+.oracle-image {
+  opacity: 0;
+  animation: fadeInSoft 3s ease-out forwards;
+}
+
 #respuesta {
   margin-top: 2.2rem;
   font-size: 1.4rem;
