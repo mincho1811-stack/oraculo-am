@@ -49,7 +49,22 @@
   // Limpia la pregunta al recargar o cerrar
   window.addEventListener("beforeunload", limpiarPregunta);
 </script>
-    
+
+    <p class="fade-in">
+  Permite que llegue la respuesta.
+</p>
+
+    <h1 class="fade-in">Oráculo AM</h1>
+
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const elements = document.querySelectorAll(".fade-in");
+    elements.forEach((el, i) => {
+      el.style.animationDelay = `${i * 0.4}s`;
+    });
+  });
+</script>
+
 <section id="proximamente-pro"></section>
 <section id="sobre-oraculo"></section>
 <section id="homenaje-eb"></section>
