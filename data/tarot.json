@@ -1,0 +1,23 @@
+[
+  {
+    "id": 0,
+    "nombre": "El Loco",
+    "imagen": "img/tarot/00_el_loco.jpg",
+    "derecho": "Inicio, libertad, salto de fe, confianza en el camino.",
+    "invertido": "Imprudencia, dispersión, miedo a avanzar."
+  },
+  {
+    "id": 1,
+    "nombre": "El Mago",
+    "imagen": "img/tarot/01_el_mago.jpg",
+    "derecho": "Voluntad, manifestación, poder creativo.",
+    "invertido": "Manipulación, duda, energía bloqueada."
+  },
+  {
+    "id": 2,
+    "nombre": "La Sacerdotisa",
+    "imagen": "img/tarot/02_la_sacerdotisa.jpg",
+    "derecho": "Intuición, misterio, conocimiento interior.",
+    "invertido": "Desconexión interna, secretos velados."
+  }
+]
