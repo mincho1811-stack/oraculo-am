@@ -85,6 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 400);
 
     localStorage.setItem("ultimaConsulta", hoy);
+
+    localStorage.setItem("oraculoAM_PRO", "true");
+
+    const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
+
   });
 
 });
