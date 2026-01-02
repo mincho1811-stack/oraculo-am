@@ -222,4 +222,22 @@ footer {
   transition: opacity 1.8s ease;
 }
 
+#ritual-contenedor {
+  transition: opacity 2s ease, filter 2s ease;
+}
+
+#ritual-contenedor.silencio {
+  opacity: 0;
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+#respuesta {
+  margin-top: 3rem;
+  min-height: 140px;
+  opacity: 0;
+  transition: opacity 2s ease;
+  text-align: center;
+}
+
 }
