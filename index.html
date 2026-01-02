@@ -2,166 +2,152 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Oráculo AM</title>
+  <title>Oráculo AM — Anima Mundi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-  <main class="oraculo">
+<main class="oraculo">
+
+  <!-- Encabezado -->
+  <header class="encabezado fade-in">
     <h1>Oráculo AM</h1>
     <h2 class="subtitulo">Anima Mundi</h2>
+  </header>
 
-    <p class="ritual">
+  <!-- Ritual -->
+  <section class="ritual fade-in">
+    <p>
       Respira.<br>
       Conecta.<br>
       Consulta.
     </p>
+  </section>
 
-        <p class="fade-in">
-  No busques la respuesta que deseas.
-  Permite que llegue la respuesta.
-</p>
-    
-    <p class="preparacion">
+  <!-- Preparación -->
+  <section class="preparacion fade-in">
+    <p>
       Formula una sola pregunta.<br>
-      Puedes escribirla o mantenerla clara en tu mente.<br>
-      <em>La pregunta no se guarda ni se envía. Es solo un apoyo para tu enfoque interior.</em>
+      Puedes escribirla o mantenerla clara en tu mente.
+    </p>
+    <p class="nota">
+      La pregunta no se guarda ni se envía.<br>
+      Es solo un apoyo para tu enfoque interior.
+    </p>
+  </section>
+
+  <!-- Pregunta -->
+  <section class="pregunta fade-in">
+    <input
+      type="text"
+      id="pregunta"
+      placeholder="Puedes escribir tu pregunta aquí (opcional)"
+      autocomplete="off"
+    >
+  </section>
+
+  <!-- Consulta -->
+  <section class="consulta fade-in">
+    <button id="consultar">Consultar</button>
+    <div id="respuesta"></div>
+  </section>
+
+  <!-- Idiomas PRO -->
+  <section class="idiomas fade-in">
+    <p class="idiomas-texto">
+      Otros idiomas disponibles en versión PRO
+    </p>
+    <div class="banderas">
+      🇬🇧 🇯🇵 🇫🇷 🇩🇪 🇮🇹 🇵🇹
+    </div>
+  </section>
+
+  <!-- Versión PRO -->
+  <section class="version-pro fade-in">
+    <h2>Versión PRO</h2>
+
+    <p class="pro-intro">
+      El Oráculo esencial es gratuito y suficiente.<br>
+      La versión PRO abre capas simbólicas más profundas.
     </p>
 
-    <div class="pregunta">
-      <input
-        type="text"
-        id="pregunta"
-        placeholder="Puedes escribir tu pregunta aquí (opcional)"
-        autocomplete="off"
-      >
-    </div>
-  
-    <div class="consulta">
-      <button id="consultar">Consultar</button>
-      <div id="respuesta"></div>
-    </div>
+    <div class="pro-grid">
+      <div class="pro-card">
+        <h3>Esencial</h3>
+        <ul>
+          <li>1 consulta por día</li>
+          <li>Español</li>
+          <li>Palabras & frases</li>
+          <li>Sin Tarot</li>
+        </ul>
+      </div>
 
-    <script>
-  const textarea = document.getElementById("pregunta");
-
-  function limpiarPregunta() {
-    if (textarea) {
-      textarea.value = "";
-    }
-  }
-
-  // Limpia la pregunta al recargar o cerrar
-  window.addEventListener("beforeunload", limpiarPregunta);
-</script>
-
-    <h1 class="fade-in">Oráculo AM</h1>
-
-    <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const elements = document.querySelectorAll(".fade-in");
-    elements.forEach((el, i) => {
-      el.style.animationDelay = `${i * 0.4}s`;
-    });
-  });
-</script>
-
-<section id="sobre-oraculo"></section>
-<section id="homenaje-eb"></section>
-<section id="aportes"></section>
-
-<section id="sobre-oraculo" class="section">
-  <h2>Sobre El Oráculo AM - Anima Mundi</h2>
-  <p>
-    El Oráculo AM es una herramienta simbólica de introspección.
-    No predice, no impone y no decide por ti.
-  </p>
-  <p>
-    Cada consulta es una invitación al silencio interior,
-    a escuchar lo que ya está presente.
-  </p>
-  <p>
-    Las respuestas no son sentencias.
-    Son espejos.
-  </p>
-</section>
-
-    <section id="homenaje-eb" class="section homenaje">
-  <h3>Un homenaje</h3>
-  <p>
-    Este Oráculo honra el espíritu creativo y visionario de
-    <strong>Enrique Barrios</strong>,
-    autor de <em>Ami de las estrellas</em> y creador de
-    <em>El Oráculo del Siglo XXI</em>.
-  </p>
-  <p>
-    No busca replicar su obra, sino honrar su intención:
-    invitar a la introspección, al silencio interior
-    y a la escucha profunda.
-  </p>
-  <p class="firma">
-    Gracias por encender una luz que sigue iluminando.
-  </p>
-</section>
-
-    <section id="aportes" class="section aportes">
-  <h2>Aportes conscientes</h2>
-  <p>
-    Si este Oráculo te acompañó,
-    puedes apoyar su existencia.
-  </p>
-  <p>
-    Los aportes son voluntarios,
-    conscientes y agradecidos.
-  </p>
-  <a href="https://ko-fi.com/oraculoam" target="_blank" class="btn-aporte">
-    🤍 Aportar en Ko-fi
-  </a>
-</section>
-
-    <section class="version-pro">
-  <h2>Versión PRO</h2>
-
-  <p class="pro-intro">
-    El Oráculo esencial es gratuito y suficiente.  
-    La versión PRO existe para quienes desean vivenciarlo más profundamente.<br>
-    Sostiene el proyecto y habilita capas más profundas.
-  </p>
-     
-  <div class="pro-grid">
-    <div>
-      <h3>Esencial</h3>
-      <ul>
-        <li>1 consulta por día</li>
-        <li>Idioma español</li>
-        <li>Ritual simple</li>
-        <li>Sin Tarot</li>
-        <li>Sin registro</li>
-      </ul>
+      <div class="pro-card destacado">
+        <h3>PRO</h3>
+        <ul>
+          <li>Consultas ilimitadas</li>
+          <li>Idiomas adicionales</li>
+          <li>Tarot simbólico</li>
+          <li>IA interpretativa</li>
+          <li>Rituales extendidos</li>
+        </ul>
+      </div>
     </div>
 
-    <div>
-      <h3>PRO</h3>
-      <ul>
-        <li>Consultas sin límite</li>
-        <li>Idiomas adicionales</li>
-        <li>Tarot simbólico</li>
-        <li>IA interpretativa</li>
-        <li>Rituales extendidos</li>
-      </ul>
-    </div>
-  </div>
+    <a href="#" class="btn-pro">Acceder a PRO</a>
+  </section>
 
-  <p class="pro-note">
-    El acceso PRO se habilita mediante un aporte consciente.
-  </p>
-</section>
+  <!-- Sobre el Oráculo -->
+  <section class="section fade-in">
+    <h2>Sobre el Oráculo</h2>
+    <p>
+      El Oráculo AM no predice ni decide por ti.<br>
+      Es un espejo simbólico para la introspección.
+    </p>
+    <p>
+      Cada respuesta es una invitación al silencio interior.
+    </p>
+  </section>
 
-    <footer>
-      <p>© Oráculo AM — Anima Mundi</p>
-    </footer>
-  </main>
+  <!-- Homenaje -->
+  <section class="section homenaje fade-in">
+    <h3>Un homenaje</h3>
+    <p>
+      Este Oráculo honra el espíritu creativo de
+      <strong>Enrique Barrios</strong>,
+      autor de <em>Ami de las estrellas</em> y
+      <em>El Oráculo del Siglo XXI</em>.
+    </p>
+    <p class="firma">
+      Gracias por encender una luz que sigue iluminando.
+    </p>
+  </section>
 
-  <script src="script.js"></script>
+  <!-- Aportes -->
+  <section class="section aportes fade-in">
+    <h2>Aportes conscientes</h2>
+    <p>
+      Si este Oráculo te acompañó,<br>
+      puedes sostener su existencia.
+    </p>
+    <a
+      href="https://ko-fi.com/oraculoam"
+      target="_blank"
+      class="btn-aporte"
+    >
+      🤍 Aportar en Ko-fi
+    </a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="fade-in">
+    © Oráculo AM — Anima Mundi
+  </footer>
+
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
