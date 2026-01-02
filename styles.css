@@ -201,12 +201,12 @@ button:hover {
   text-decoration: none;
   color: inherit;
   transition: all 0.3s ease;
-   opacity: 1.2;
+   opacity: 0.9;
 }
 
 .btn-aporte:hover {
   background: rgba(255,255,255,0.1);
-  opacity: 2;
+  opacity: 1;
 }
 
 @media (max-width: 600px) {
