@@ -207,4 +207,19 @@ footer {
     opacity: 1;
     transform: translateY(0);
   }
+  #ritual-contenedor {
+  transition: opacity 1.8s ease, filter 1.8s ease;
+}
+
+#ritual-contenedor.silencio {
+  opacity: 0;
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+#respuesta {
+  min-height: 120px;
+  transition: opacity 1.8s ease;
+}
+
 }
