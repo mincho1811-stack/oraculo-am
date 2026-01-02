@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const boton = document.getElementById("consultar");
   const respuesta = document.getElementById("respuesta");
   const pregunta = document.getElementById("pregunta");
+  const ritual = document.querySelector(".ritual");
 
   let banco = null;
 
@@ -15,24 +16,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const hoy = new Date().toDateString();
     const ultima = localStorage.getItem("ultimaConsulta");
 
+    // Límite versión esencial
     if (ultima === hoy) {
-      respuesta.innerText = "EL ORÁCULO YA HABLÓ HOY. REGRESA MAÑANA.";
-      respuesta.style.opacity = 1;
-      boton.disabled = true;
-      boton.style.opacity = 0.4;
+      mostrarMensaje("El Oráculo ya habló hoy.<br>Regresa mañana.");
+      bloquearBoton();
       return;
     }
 
     if (!banco) {
-      respuesta.innerText = "El Oráculo permanece en silencio.";
-      respuesta.style.opacity = 1;
+      mostrarMensaje("El Oráculo permanece en silencio.");
       return;
     }
 
-    // La pregunta NO se guarda
-    pregunta.value = "";
+    // La pregunta nunca se guarda
+    if (pregunta) pregunta.value = "";
 
+    // Transición ritual
+    ritual.classList.add("fade-out");
     respuesta.style.opacity = 0;
+
+    setTimeout(() => {
+      generarRespuesta();
+    }, 1400);
+
+    localStorage.setItem("ultimaConsulta", hoy);
+  });
+
+  function generarRespuesta() {
 
     const tipos = [
       "palabra",
@@ -70,26 +80,18 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
     }
 
-    function prepararRespuesta() {
-  const ritual = document.querySelector(".ritual");
-  ritual.classList.add("hidden");
+    respuesta.innerHTML = resultado.join("<br><br>");
+    respuesta.style.opacity = 1;
+  }
 
-  setTimeout(() => {
-    mostrarRespuesta();
-  }, 1400);
-}
+  function mostrarMensaje(texto) {
+    respuesta.innerHTML = texto;
+    respuesta.style.opacity = 1;
+  }
 
-    setTimeout(() => {
-      respuesta.innerHTML = resultado.join("<br><br>");
-      respuesta.style.opacity = 1;
-    }, 400);
-
-    localStorage.setItem("ultimaConsulta", hoy);
-
-    localStorage.setItem("oraculoAM_PRO", "true");
-
-    const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
-
-  });
+  function bloquearBoton() {
+    boton.disabled = true;
+    boton.style.opacity = 0.4;
+  }
 
 });
