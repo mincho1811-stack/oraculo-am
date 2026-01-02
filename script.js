@@ -11,6 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(data => banco = data);
 
+  let tarot = null;
+
+fetch("data/tarot.json")
+  .then(res => res.json())
+  .then(data => tarot = data);
+
   boton.addEventListener("click", () => {
 
     const hoy = new Date().toDateString();
@@ -52,6 +58,41 @@ document.addEventListener("DOMContentLoaded", () => {
       "frases_3",
       "frases_5"
     ];
+
+    const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
+
+// Probabilidad de Tarot SOLO si es PRO
+const usarTarot = esPro && Math.random() < 0.35;
+
+    if (usarTarot && tarot) {
+
+  const carta = tarot[Math.floor(Math.random() * tarot.length)];
+  const invertida = Math.random() < 0.5;
+
+  const interpretacion = invertida
+    ? carta.invertido
+    : carta.derecho;
+
+  respuesta.innerHTML = `
+    <div class="tarot-card">
+      <img src="${carta.imagen}" alt="${carta.nombre}">
+      <h3>${carta.nombre}</h3>
+      <p class="posicion">
+        ${invertida ? "Invertida" : "Al derecho"}
+      </p>
+      <p class="interpretacion">
+        ${interpretacion}
+      </p>
+    </div>
+  `;
+
+  setTimeout(() => {
+    respuesta.style.opacity = 1;
+  }, 600);
+
+  localStorage.setItem("ultimaConsulta", hoy);
+  return;
+}
 
     const tipo = tipos[Math.floor(Math.random() * tipos.length)];
     let resultado = [];
