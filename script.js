@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const boton = document.getElementById("consultar");
   const respuesta = document.getElementById("respuesta");
   const pregunta = document.getElementById("pregunta");
-  const ritual = document.querySelector(".ritual");
+  const ritualContenedor = document.getElementById("ritual-contenedor");
 
   let banco = null;
 
@@ -11,47 +11,35 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(data => banco = data);
 
-  let tarot = null;
-
-fetch("data/tarot.json")
-  .then(res => res.json())
-  .then(data => tarot = data);
-
   boton.addEventListener("click", () => {
 
     const hoy = new Date().toDateString();
     const ultima = localStorage.getItem("ultimaConsulta");
 
-    // Límite versión esencial
     if (ultima === hoy) {
-      mostrarMensaje("El Oráculo ya habló hoy.<br>Regresa mañana.");
-      bloquearBoton();
+      mostrar("El Oráculo ya habló hoy.<br>Regresa mañana.");
       return;
     }
 
     if (!banco) {
-      mostrarMensaje("El Oráculo permanece en silencio.");
+      mostrar("El Oráculo permanece en silencio.");
       return;
     }
 
-    // La pregunta nunca se guarda
+    // Limpia la pregunta (no se guarda)
     if (pregunta) pregunta.value = "";
 
-    // Transición ritual
-    ritual.classList.add("fade-out");
-    respuesta.style.opacity = 0;
+    // Silencio ritual
+    ritualContenedor.classList.add("silencio");
 
     setTimeout(() => {
-      generarRespuesta();
-    }, 1400);
+      revelarRespuesta();
+    }, 1800);
 
     localStorage.setItem("ultimaConsulta", hoy);
   });
 
-  const contenedor = document.getElementById("ritual-contenedor");
-contenedor.classList.add("silencio");
-
-  function generarRespuesta() {
+  function revelarRespuesta() {
 
     const tipos = [
       "palabra",
@@ -61,41 +49,6 @@ contenedor.classList.add("silencio");
       "frases_3",
       "frases_5"
     ];
-
-    const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
-
-// Probabilidad de Tarot SOLO si es PRO
-const usarTarot = esPro && Math.random() < 0.35;
-
-    if (usarTarot && tarot) {
-
-  const carta = tarot[Math.floor(Math.random() * tarot.length)];
-  const invertida = Math.random() < 0.5;
-
-  const interpretacion = invertida
-    ? carta.invertido
-    : carta.derecho;
-
-  respuesta.innerHTML = `
-    <div class="tarot-card">
-      <img src="${carta.imagen}" alt="${carta.nombre}">
-      <h3>${carta.nombre}</h3>
-      <p class="posicion">
-        ${invertida ? "Invertida" : "Al derecho"}
-      </p>
-      <p class="interpretacion">
-        ${interpretacion}
-      </p>
-    </div>
-  `;
-
-  setTimeout(() => {
-    respuesta.style.opacity = 1;
-  }, 600);
-
-  localStorage.setItem("ultimaConsulta", hoy);
-  return;
-}
 
     const tipo = tipos[Math.floor(Math.random() * tipos.length)];
     let resultado = [];
@@ -128,14 +81,9 @@ const usarTarot = esPro && Math.random() < 0.35;
     respuesta.style.opacity = 1;
   }
 
-  function mostrarMensaje(texto) {
+  function mostrar(texto) {
     respuesta.innerHTML = texto;
     respuesta.style.opacity = 1;
-  }
-
-  function bloquearBoton() {
-    boton.disabled = true;
-    boton.style.opacity = 0.4;
   }
 
 });
