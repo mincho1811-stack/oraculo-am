@@ -233,11 +233,23 @@ footer {
 }
 
 #respuesta {
-  margin-top: 3rem;
+  margin: 6rem auto 0;
   min-height: 140px;
   opacity: 0;
   transition: opacity 2s ease;
   text-align: center;
+  font-size: 1.4rem;
+  letter-spacing: 0.14em;
+}
+
+.oraculo {
+  align-items: flex-start;
+}
+
+#ritual-contenedor.silencio {
+  height: 0;
+  margin: 0;
+  overflow: hidden;
 }
 
 }
