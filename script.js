@@ -70,6 +70,15 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
     }
 
+    function prepararRespuesta() {
+  const ritual = document.querySelector(".ritual");
+  ritual.classList.add("hidden");
+
+  setTimeout(() => {
+    mostrarRespuesta();
+  }, 1400);
+}
+
     setTimeout(() => {
       respuesta.innerHTML = resultado.join("<br><br>");
       respuesta.style.opacity = 1;
