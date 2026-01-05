@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const ultima = localStorage.getItem("ultimaConsulta");
 
     if (ultima === hoy) {
-      mostrar("El Oráculo ya habló hoy.<br>Regresa mañana.");
+      mostrar("El Oráculo ya habló hoy. Regresa mañana.");
       return;
     }
 
@@ -26,10 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Limpia la pregunta (no se guarda)
+    // limpia la pregunta (no se guarda)
     if (pregunta) pregunta.value = "";
 
-    // Silencio ritual
+    // aplica silencio (desvanece y colapsa)
     ritualContenedor.classList.add("silencio");
 
     setTimeout(() => {
