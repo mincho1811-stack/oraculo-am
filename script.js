@@ -2,8 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const boton = document.getElementById("consultar");
   const respuesta = document.getElementById("respuesta");
-  const pregunta = document.getElementById("pregunta");
-  const ritualContenedor = document.getElementById("ritual-contenedor");
+  const preguntaInput = document.getElementById("pregunta");
+  const capa = document.getElementById("capa-oraculo");
+  const guardarBtn = document.getElementById("guardar");
+  const accionesPro = document.getElementById("acciones-pro");
 
   let banco = null;
 
@@ -11,13 +13,19 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(data => banco = data);
 
+  const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
+
+  if (esPro) {
+    accionesPro.classList.remove("oculto");
+  }
+
   boton.addEventListener("click", () => {
 
     const hoy = new Date().toDateString();
     const ultima = localStorage.getItem("ultimaConsulta");
 
-    if (ultima === hoy) {
-      mostrar("El Oráculo ya habló hoy. Regresa mañana.");
+    if (!esPro && ultima === hoy) {
+      mostrar("EL ORÁCULO YA HABLÓ HOY.");
       return;
     }
 
@@ -26,28 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // limpia la pregunta (no se guarda)
-    if (pregunta) pregunta.value = "";
-
-    // aplica silencio (desvanece y colapsa)
-    ritualContenedor.classList.add("silencio");
-
-    setTimeout(() => {
-      revelarRespuesta();
-    }, 1800);
-
-    localStorage.setItem("ultimaConsulta", hoy);
-  });
-
-  function revelarRespuesta() {
+    const pregunta = preguntaInput.value;
+    preguntaInput.value = "";
 
     const tipos = [
       "palabra",
       "palabras_3",
-      "palabras_5",
-      "frase_1",
-      "frases_3",
-      "frases_5"
+      "frase_1"
     ];
 
     const tipo = tipos[Math.floor(Math.random() * tipos.length)];
@@ -56,34 +49,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const tomar = (arr, n) =>
       arr.sort(() => 0.5 - Math.random()).slice(0, n);
 
-    switch (tipo) {
-      case "palabra":
-        resultado = tomar(banco.palabras, 1);
-        break;
-      case "palabras_3":
-        resultado = tomar(banco.palabras, 3);
-        break;
-      case "palabras_5":
-        resultado = tomar(banco.palabras, 5);
-        break;
-      case "frase_1":
-        resultado = tomar(banco.frases_cortas, 1);
-        break;
-      case "frases_3":
-        resultado = tomar(banco.frases_cortas, 3);
-        break;
-      case "frases_5":
-        resultado = tomar(banco.frases_largas, 1);
-        break;
+    if (tipo === "palabra") resultado = tomar(banco.palabras, 1);
+    if (tipo === "palabras_3") resultado = tomar(banco.palabras, 3);
+    if (tipo === "frase_1") resultado = tomar(banco.frases_cortas, 1);
+
+    const textoRespuesta = resultado.join("<br><br>");
+
+    mostrar(textoRespuesta);
+
+    if (!esPro) {
+      localStorage.setItem("ultimaConsulta", hoy);
     }
 
-    respuesta.innerHTML = resultado.join("<br><br>");
-    respuesta.style.opacity = 1;
-  }
+    guardarBtn.onclick = () => guardarHistorial(pregunta, textoRespuesta);
+  });
 
   function mostrar(texto) {
     respuesta.innerHTML = texto;
-    respuesta.style.opacity = 1;
+    capa.classList.add("activa");
+  }
+
+  function guardarHistorial(pregunta, respuesta) {
+    const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
+
+    historial.push({
+      pregunta: pregunta || "(sin pregunta escrita)",
+      respuesta,
+      fecha: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("historialAM", JSON.stringify(historial));
+    guardarBtn.innerText = "Guardado ✓";
   }
 
 });
+
