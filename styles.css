@@ -252,4 +252,43 @@ footer {
   overflow: hidden;
 }
 
+/* -- Colapsar contenido del ritual al desaparecer -- */
+#ritual-contenedor {
+  transition: all 1.8s ease;
+  opacity: 1;
+  height: auto;
+  overflow: visible;
+}
+
+#ritual-contenedor.silencio {
+  opacity: 0;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* -- La respuesta ahora se centra sola -- */
+#respuesta-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px; /* altura mínima después del despliegue */
+}
+
+#respuesta {
+  font-size: 1.45rem;
+  letter-spacing: 0.12em;
+  opacity: 0;
+  text-align: center;
+  transition: opacity 2s ease;
+}
+
+/* Ajustes de footer tras silencio */
+footer {
+  margin-top: 2.5rem;
+  opacity: 0.45;
+  font-size: 0.75rem;
+}
+
 }
