@@ -1,3 +1,7 @@
+/* =========================
+   BASE
+========================= */
+
 * {
   box-sizing: border-box;
 }
@@ -5,17 +9,21 @@
 body {
   margin: 0;
   font-family: Georgia, serif;
-  background: radial-gradient(circle at top, #2e1a47, #0f1226);
+  background: linear-gradient(180deg, #1b1f3b, #2e1a47);
   color: #ffffff;
-  display: flex;
-  justify-content: center;
+  min-height: 100vh;
 }
 
 .oraculo {
-  max-width: 560px;
-  padding: 2.5rem 1.5rem;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
   text-align: center;
 }
+
+/* =========================
+   TITULOS
+========================= */
 
 h1 {
   margin-bottom: 0.2rem;
@@ -23,55 +31,81 @@ h1 {
 }
 
 .subtitulo {
+  margin-top: 0;
   font-size: 0.75rem;
   letter-spacing: 0.35em;
   opacity: 0.6;
   text-transform: uppercase;
 }
 
-.ritual {
-  margin: 2.2rem 0;
-  font-size: 1.1rem;
-  line-height: 1.7;
+/* =========================
+   RITUAL
+========================= */
+
+#bloque-ritual {
+  margin-bottom: 5rem;
 }
 
-.fade-out {
+.ritual {
+  margin-top: 2rem;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.fade-in {
   opacity: 0;
-  transition: opacity 1.2s ease;
+  transform: translateY(12px);
+  animation: fadeInSoft 2.4s ease-out forwards;
 }
 
 .preparacion {
+  margin-top: 1.8rem;
   font-size: 0.95rem;
   opacity: 0.85;
 }
 
-.nota {
+.preparacion em {
+  display: block;
+  margin-top: 0.4rem;
   font-size: 0.8rem;
   opacity: 0.6;
-  margin-top: 0.6rem;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.pregunta {
+  margin-top: 1.6rem;
 }
 
 .pregunta input {
   width: 100%;
-  padding: 0.9rem 1.2rem;
-  border-radius: 30px;
+  max-width: 420px;
+  padding: 0.8rem 1rem;
+  border-radius: 20px;
   border: none;
   outline: none;
-  font-family: inherit;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
 }
 
+/* =========================
+   BOTONES
+========================= */
+
 .consulta {
-  margin-top: 2.4rem;
+  margin-top: 2.6rem;
 }
 
 button {
   background: #6a5acd;
-  border: none;
   color: white;
-  padding: 1rem 2.8rem;
+  border: none;
+  padding: 0.9rem 2.6rem;
   border-radius: 999px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -80,215 +114,200 @@ button:hover {
   opacity: 0.9;
 }
 
-#respuesta {
-  margin-top: 2rem;
-  font-size: 1.4rem;
-  letter-spacing: 0.12em;
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* =========================
+   CAPA ORÁCULO (RESPUESTA)
+========================= */
+
+#capa-oraculo {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(46,26,71,0.98), rgba(10,10,20,0.98));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 1.2s ease;
+  z-index: 999;
 }
 
-.idiomas {
-  margin-top: 3.5rem;
-  font-size: 0.8rem;
-  opacity: 0.6;
+#capa-oraculo.activa {
+  opacity: 1;
+  pointer-events: all;
 }
 
-.banderas {
-  margin-top: 0.5rem;
+#respuesta {
   font-size: 1.4rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  max-width: 520px;
+  line-height: 1.6;
+  animation: fadeInSoft 2.5s ease-out forwards;
 }
 
-.version-pro {
-  margin-top: 5rem;
+/* =========================
+   PRO
+========================= */
+
+#acciones-pro {
+  margin-top: 3rem;
 }
 
-.pro-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
+#acciones-pro.oculto {
+  display: none;
 }
 
-.pro-card {
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 1.4rem;
-  border-radius: 16px;
-  font-size: 0.9rem;
+#acciones-pro button {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.4);
+  font-size: 0.85rem;
 }
 
-.destacado {
-  border-color: #a99bff;
-}
-
-.btn-pro {
-  display: inline-block;
-  margin-top: 1rem;
-  text-decoration: none;
-  color: #cfc6ff;
-  border: 1px solid rgba(255,255,255,0.35);
-  padding: 0.7rem 1.8rem;
-  border-radius: 999px;
-}
+/* =========================
+   SECCIONES
+========================= */
 
 .section {
-  margin-top: 5rem;
+  margin: 6rem auto;
+  max-width: 720px;
+  line-height: 1.7;
+}
+
+.section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.05em;
+  font-weight: normal;
+}
+
+.section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+  font-weight: normal;
+}
+
+.section p {
   font-size: 0.95rem;
   opacity: 0.85;
+  margin-bottom: 0.8rem;
 }
+
+/* =========================
+   HOMENAJE
+========================= */
 
 .homenaje {
   font-size: 0.85rem;
   opacity: 0.7;
 }
 
-.firma {
-  margin-top: 1.4rem;
-  font-style: italic;
+.homenaje .firma {
+  margin-top: 1.8rem;
+  font-size: 0.8rem;
   opacity: 0.5;
+  font-style: italic;
+}
+
+/* =========================
+   APORTES
+========================= */
+
+.aportes {
+  margin-top: 5rem;
 }
 
 .btn-aporte {
   display: inline-block;
-  margin-top: 1.4rem;
-  text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.4);
-  padding: 0.6rem 1.6rem;
+  margin-top: 1.8rem;
+  padding: 0.6rem 1.5rem;
   border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.4);
+  text-decoration: none;
   color: inherit;
+  font-size: 0.85rem;
+  transition: background 0.3s ease, opacity 0.3s ease;
 }
 
-.tarot-card {
-  margin-top: 2rem;
-  animation: fadeIn 2.6s ease forwards;
+.btn-aporte:hover {
+  background: rgba(255,255,255,0.1);
+  opacity: 1;
 }
 
-.tarot-card img {
-  width: 180px;
-  border-radius: 12px;
-  box-shadow: 0 0 25px rgba(170,160,255,0.25);
-  margin-bottom: 1rem;
+/* =========================
+   VERSION PRO
+========================= */
+
+.version-pro {
+  margin-top: 6rem;
 }
 
-.tarot-card h3 {
-  margin: 0.6rem 0 0.2rem;
-  font-weight: normal;
-  letter-spacing: 0.08em;
+.pro-intro {
+  opacity: 0.9;
+  margin-bottom: 3rem;
 }
 
-.posicion {
-  font-size: 0.75rem;
-  opacity: 0.6;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+.pro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
 }
 
-.interpretacion {
-  margin-top: 1rem;
-  font-size: 0.95rem;
+.pro-grid ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pro-grid li {
+  margin: 0.6rem 0;
   opacity: 0.85;
-  line-height: 1.6;
 }
+
+.pro-grid li::before {
+  content: "✧ ";
+  opacity: 0.6;
+}
+
+/* =========================
+   FOOTER
+========================= */
 
 footer {
-  margin-top: 4rem;
-  font-size: 0.7rem;
+  margin-top: 6rem;
   opacity: 0.45;
+  font-size: 0.75rem;
 }
 
-.fade-in {
-  opacity: 0;
-  transform: translateY(14px);
-  animation: fadeIn 2.2s ease forwards;
-}
+/* =========================
+   ANIMACIONES
+========================= */
 
-@keyframes fadeIn {
+@keyframes fadeInSoft {
   to {
     opacity: 1;
     transform: translateY(0);
   }
-  #ritual-contenedor {
-  transition: opacity 1.8s ease, filter 1.8s ease;
 }
 
-#ritual-contenedor.silencio {
-  opacity: 0;
-  filter: blur(6px);
-  pointer-events: none;
-}
+/* =========================
+   RESPONSIVE
+========================= */
 
-#respuesta {
-  min-height: 120px;
-  transition: opacity 1.8s ease;
-}
+@media (max-width: 600px) {
+  #respuesta {
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+  }
 
-#ritual-contenedor {
-  transition: opacity 2s ease, filter 2s ease;
-}
-
-#ritual-contenedor.silencio {
-  opacity: 0;
-  filter: blur(8px);
-  pointer-events: none;
-}
-
-#respuesta {
-  margin: 6rem auto 0;
-  min-height: 140px;
-  opacity: 0;
-  transition: opacity 2s ease;
-  text-align: center;
-  font-size: 1.4rem;
-  letter-spacing: 0.14em;
-}
-
-.oraculo {
-  align-items: flex-start;
-}
-
-#ritual-contenedor.silencio {
-  height: 0;
-  margin: 0;
-  overflow: hidden;
-}
-
-/* -- Colapsar contenido del ritual al desaparecer -- */
-#ritual-contenedor {
-  transition: all 1.8s ease;
-  opacity: 1;
-  height: auto;
-  overflow: visible;
-}
-
-#ritual-contenedor.silencio {
-  opacity: 0;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-}
-
-/* -- La respuesta ahora se centra sola -- */
-#respuesta-contenedor {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 300px; /* altura mínima después del despliegue */
-}
-
-#respuesta {
-  font-size: 1.45rem;
-  letter-spacing: 0.12em;
-  opacity: 0;
-  text-align: center;
-  transition: opacity 2s ease;
-}
-
-/* Ajustes de footer tras silencio */
-footer {
-  margin-top: 2.5rem;
-  opacity: 0.45;
-  font-size: 0.75rem;
-}
-
+  .section {
+    margin: 4rem auto;
+  }
 }
