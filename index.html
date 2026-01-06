@@ -29,7 +29,7 @@
 
     <p class="preparacion">
       Formula una sola pregunta.<br>
-      Puedes escribirla o mantenerla clara en tu mente.<br>
+      Escríbela o sostenla en tu mente.<br>
       <em>La pregunta no se guarda ni se envía.</em>
     </p>
 
@@ -48,25 +48,39 @@
   </section>
 
   <!-- RESPUESTA -->
-  <section id="respuesta-contenedor" class="oculto">
-    <div id="respuesta"></div>
+  <section id="respuesta" class="oculto">
+    <p id="texto-respuesta"></p>
 
-    <button id="guardar" class="btn-secundario oculto">
-      Guardar consulta ✧
-    </button>
-
-    <button id="volver" class="btn-secundario">
-      Volver al silencio
-    </button>
+    <div class="acciones-respuesta">
+      <button id="guardar" class="pro">Guardar consulta ✧</button>
+      <button id="volver">Volver al silencio</button>
+    </div>
   </section>
 
-  <!-- HISTORIAL PRO -->
+  <!-- HISTORIAL (PRO) -->
   <section id="historial" class="oculto">
-    <h2>Consultas guardadas conscientemente</h2>
+    <h3>Consultas guardadas conscientemente</h3>
     <div id="lista-historial"></div>
-    <button id="borrar-historial" class="btn-secundario">
-      Borrar historial
-    </button>
+    <button id="borrar-historial">Borrar historial</button>
+  </section>
+
+  <!-- ACERCA DE -->
+  <section class="informativo">
+    <h3>Acerca del Oráculo AM</h3>
+    <p>
+      El Oráculo AM no predice ni aconseja.<br>
+      Refleja estados, procesos y silencios.<br>
+      Es una herramienta de contemplación.
+    </p>
+  </section>
+
+  <!-- HOMENAJE -->
+  <section class="informativo">
+    <h3>Homenaje</h3>
+    <p>
+      Este espacio honra la escucha profunda,<br>
+      el pensamiento simbólico y la conciencia en expansión.
+    </p>
   </section>
 
   <footer>
@@ -75,6 +89,6 @@
 
 </main>
 
-<script src="script.js" defer></script>
+<script src="script.js"></script>
 </body>
 </html>
