@@ -82,7 +82,24 @@ document.addEventListener("DOMContentLoaded", () => {
     guardarBtn.innerText = "Guardado ✓";
   }
 
-  const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
+const capa = document.getElementById("capa-oraculo");
+const volver = document.getElementById("volver");
+
+// Volver con botón
+volver.addEventListener("click", cerrarOraculo);
+
+// Volver con doble clic en la respuesta
+respuesta.addEventListener("dblclick", cerrarOraculo);
+
+function cerrarOraculo() {
+  capa.classList.remove("activa");
+
+  // opcional: limpiar respuesta
+  setTimeout(() => {
+    respuesta.innerHTML = "";
+  }, 800);
+}
+const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
 
 const accionesPro = document.getElementById("acciones-pro");
 const seccionHistorial = document.getElementById("historial-pro");
@@ -143,21 +160,3 @@ btnBorrar.addEventListener("click", () => {
 });
 
 });
-
-const capa = document.getElementById("capa-oraculo");
-const volver = document.getElementById("volver");
-
-// Volver con botón
-volver.addEventListener("click", cerrarOraculo);
-
-// Volver con doble clic en la respuesta
-respuesta.addEventListener("dblclick", cerrarOraculo);
-
-function cerrarOraculo() {
-  capa.classList.remove("activa");
-
-  // opcional: limpiar respuesta
-  setTimeout(() => {
-    respuesta.innerHTML = "";
-  }, 800);
-}
