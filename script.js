@@ -1,46 +1,74 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  /* =========================
+     ELEMENTOS BASE
+  ========================= */
+
   const boton = document.getElementById("consultar");
   const respuesta = document.getElementById("respuesta");
-  const preguntaInput = document.getElementById("pregunta");
+  const pregunta = document.getElementById("pregunta");
   const capa = document.getElementById("capa-oraculo");
-  const guardarBtn = document.getElementById("guardar");
+  const volver = document.getElementById("volver");
+
   const accionesPro = document.getElementById("acciones-pro");
+  const seccionHistorial = document.getElementById("historial-pro");
+  const listaHistorial = document.getElementById("lista-historial");
+  const btnGuardar = document.getElementById("guardar-historial");
+  const btnBorrar = document.getElementById("borrar-historial");
 
   let banco = null;
+
+  /* =========================
+     CARGAR BANCO
+  ========================= */
 
   fetch("data/banco.json")
     .then(res => res.json())
     .then(data => banco = data);
 
+  /* =========================
+     ESTADO PRO
+  ========================= */
+
   const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
 
-  if (esPro) {
+  if (esPro && accionesPro && seccionHistorial) {
     accionesPro.classList.remove("oculto");
+    seccionHistorial.classList.remove("oculto");
   }
 
+  /* =========================
+     CONSULTA
+  ========================= */
+
   boton.addEventListener("click", () => {
+
+    if (!banco) {
+      respuesta.innerText = "El Oráculo permanece en silencio.";
+      mostrarOraculo();
+      return;
+    }
 
     const hoy = new Date().toDateString();
     const ultima = localStorage.getItem("ultimaConsulta");
 
     if (!esPro && ultima === hoy) {
-      mostrar("EL ORÁCULO YA HABLÓ HOY.");
+      respuesta.innerText = "EL ORÁCULO YA HABLÓ HOY. REGRESA MAÑANA.";
+      mostrarOraculo();
       return;
     }
 
-    if (!banco) {
-      mostrar("El Oráculo permanece en silencio.");
-      return;
-    }
-
-    const pregunta = preguntaInput.value;
-    preguntaInput.value = "";
+    // La pregunta NO se guarda automáticamente
+    const textoPregunta = pregunta.value;
+    pregunta.value = "";
 
     const tipos = [
       "palabra",
       "palabras_3",
-      "frase_1"
+      "palabras_5",
+      "frase_1",
+      "frases_3",
+      "frases_5"
     ];
 
     const tipo = tipos[Math.floor(Math.random() * tipos.length)];
@@ -49,114 +77,105 @@ document.addEventListener("DOMContentLoaded", () => {
     const tomar = (arr, n) =>
       arr.sort(() => 0.5 - Math.random()).slice(0, n);
 
-    if (tipo === "palabra") resultado = tomar(banco.palabras, 1);
-    if (tipo === "palabras_3") resultado = tomar(banco.palabras, 3);
-    if (tipo === "frase_1") resultado = tomar(banco.frases_cortas, 1);
-
-    const textoRespuesta = resultado.join("<br><br>");
-
-    mostrar(textoRespuesta);
-
-    if (!esPro) {
-      localStorage.setItem("ultimaConsulta", hoy);
+    switch (tipo) {
+      case "palabra":
+        resultado = tomar(banco.palabras, 1);
+        break;
+      case "palabras_3":
+        resultado = tomar(banco.palabras, 3);
+        break;
+      case "palabras_5":
+        resultado = tomar(banco.palabras, 5);
+        break;
+      case "frase_1":
+        resultado = tomar(banco.frases_cortas, 1);
+        break;
+      case "frases_3":
+        resultado = tomar(banco.frases_cortas, 3);
+        break;
+      case "frases_5":
+        resultado = tomar(banco.frases_largas, 1);
+        break;
     }
 
-    guardarBtn.onclick = () => guardarHistorial(pregunta, textoRespuesta);
+    respuesta.innerHTML = resultado.join("<br><br>");
+    mostrarOraculo();
+
+    localStorage.setItem("ultimaConsulta", hoy);
+
+    // Reset botón guardar
+    if (btnGuardar) {
+      btnGuardar.innerText = "Guardar esta consulta";
+      btnGuardar.disabled = false;
+    }
   });
 
-  function mostrar(texto) {
-    respuesta.innerHTML = texto;
+  /* =========================
+     MOSTRAR / CERRAR ORÁCULO
+  ========================= */
+
+  function mostrarOraculo() {
     capa.classList.add("activa");
   }
 
-  function guardarHistorial(pregunta, respuesta) {
-    const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
-
-    historial.push({
-      pregunta: pregunta || "(sin pregunta escrita)",
-      respuesta,
-      fecha: new Date().toLocaleString()
-    });
-
-    localStorage.setItem("historialAM", JSON.stringify(historial));
-    guardarBtn.innerText = "Guardado ✓";
+  function cerrarOraculo() {
+    capa.classList.remove("activa");
   }
 
-const capa = document.getElementById("capa-oraculo");
-const volver = document.getElementById("volver");
+  if (volver) volver.addEventListener("click", cerrarOraculo);
+  if (respuesta) respuesta.addEventListener("dblclick", cerrarOraculo);
 
-// Volver con botón
-volver.addEventListener("click", cerrarOraculo);
+  /* =========================
+     HISTORIAL PRO
+  ========================= */
 
-// Volver con doble clic en la respuesta
-respuesta.addEventListener("dblclick", cerrarOraculo);
+  function cargarHistorial() {
+    if (!listaHistorial) return;
 
-function cerrarOraculo() {
-  capa.classList.remove("activa");
+    const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
+    listaHistorial.innerHTML = "";
 
-  // opcional: limpiar respuesta
-  setTimeout(() => {
-    respuesta.innerHTML = "";
-  }, 800);
-}
-const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
+    historial.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "entrada-historial";
 
-const accionesPro = document.getElementById("acciones-pro");
-const seccionHistorial = document.getElementById("historial-pro");
+      div.innerHTML = `
+        <div class="fecha">${item.fecha}</div>
+        <div class="pregunta"><strong>Pregunta:</strong> ${item.pregunta}</div>
+        <div class="respuesta"><strong>Respuesta:</strong> ${item.respuesta}</div>
+      `;
 
-if (esPro) {
-  accionesPro.classList.remove("oculto");
-  seccionHistorial.classList.remove("oculto");
-}
+      listaHistorial.appendChild(div);
+    });
+  }
 
-  const btnGuardar = document.getElementById("guardar-historial");
+  if (btnGuardar) {
+    btnGuardar.addEventListener("click", () => {
+      const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
 
-btnGuardar.addEventListener("click", () => {
-  const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
+      historial.unshift({
+        fecha: new Date().toLocaleString(),
+        pregunta: pregunta.value || "(no escrita)",
+        respuesta: respuesta.innerText
+      });
 
-  const entrada = {
-    fecha: new Date().toLocaleString(),
-    pregunta: pregunta.value || "(no escrita)",
-    respuesta: respuesta.innerText
-  };
+      localStorage.setItem("historialAM", JSON.stringify(historial));
+      cargarHistorial();
 
-  historial.unshift(entrada);
-  localStorage.setItem("historialAM", JSON.stringify(historial));
+      btnGuardar.innerText = "Guardado ✨";
+      btnGuardar.disabled = true;
+    });
+  }
+
+  if (btnBorrar) {
+    btnBorrar.addEventListener("click", () => {
+      if (confirm("¿Deseas borrar todo el historial?")) {
+        localStorage.removeItem("historialAM");
+        cargarHistorial();
+      }
+    });
+  }
 
   cargarHistorial();
-  btnGuardar.innerText = "Guardado ✨";
-  btnGuardar.disabled = true;
-});
-
-  const listaHistorial = document.getElementById("lista-historial");
-
-function cargarHistorial() {
-  const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
-  listaHistorial.innerHTML = "";
-
-  historial.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "entrada-historial";
-
-    div.innerHTML = `
-      <div class="fecha">${item.fecha}</div>
-      <div class="pregunta"><strong>Pregunta:</strong> ${item.pregunta}</div>
-      <div class="respuesta"><strong>Respuesta:</strong> ${item.respuesta}</div>
-    `;
-
-    listaHistorial.appendChild(div);
-  });
-}
-
-cargarHistorial();
-
-  const btnBorrar = document.getElementById("borrar-historial");
-
-btnBorrar.addEventListener("click", () => {
-  if (confirm("¿Deseas borrar todo el historial?")) {
-    localStorage.removeItem("historialAM");
-    cargarHistorial();
-  }
-});
 
 });
