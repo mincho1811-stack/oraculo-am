@@ -12,7 +12,6 @@ const btnBorrarHistorial = document.getElementById("borrar-historial");
 
 const inputPregunta = document.getElementById("pregunta");
 
-/* BANCO DE RESPUESTAS (AMPLIADO, CON REPETICIÓN POSIBLE) */
 const respuestas = [
   "Silencio.",
   "Observa.",
@@ -20,35 +19,20 @@ const respuestas = [
   "Espera.",
   "Confía.",
   "Acepta.",
-  "Detente.",
   "Escucha.",
-
   "No es el momento.",
-  "Aún no.",
   "Todavía.",
-  "Ahora no.",
   "Permite que sea.",
-
   "La respuesta no necesita palabras.",
   "El silencio también responde.",
   "No fuerces la comprensión.",
-  "La claridad surge cuando sueltas.",
   "Hay más de una verdad.",
-  "Lo evidente no es lo esencial.",
-  "No mires hacia afuera.",
-  "La pregunta ya transformó el camino.",
-
+  "La claridad surge cuando sueltas.",
   "El sentido se revela en quietud.",
   "Nada falta en este instante.",
-  "Lo profundo no se apresura.",
-  "La comprensión llegará sin aviso.",
-  "El proceso es parte de la respuesta.",
-  "El símbolo se revelará cuando estés listo.",
-  "La incertidumbre también guía.",
-  "Permanece atento a lo sutil."
+  "La incertidumbre también guía."
 ];
 
-/* OBTENER RESPUESTA (CON REPETICIÓN POSIBLE) */
 function obtenerRespuesta() {
   return respuestas[Math.floor(Math.random() * respuestas.length)];
 }
@@ -67,6 +51,7 @@ btnConsultar.addEventListener("click", () => {
 /* VOLVER */
 btnVolver.addEventListener("click", () => {
   vistaRespuesta.classList.add("oculto");
+  textoRespuesta.innerText = ""; // LIMPIA RESPUESTA
   vistaConsulta.classList.remove("oculto");
   inputPregunta.value = "";
   cargarHistorial();
@@ -76,7 +61,7 @@ btnVolver.addEventListener("click", () => {
 btnGuardar.addEventListener("click", () => {
   const historial = JSON.parse(localStorage.getItem("oraculoAM")) || [];
 
-  historial.push({
+  historial.unshift({
     fecha: new Date().toLocaleString(),
     pregunta: inputPregunta.value || "Pregunta no escrita",
     respuesta: textoRespuesta.innerText
