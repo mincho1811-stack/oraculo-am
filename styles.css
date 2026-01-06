@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  font-family: "Georgia", serif;
+  font-family: Georgia, serif;
   background: radial-gradient(circle at top, #1e234a, #120822);
   color: #f2f2f2;
 }
@@ -16,7 +16,6 @@ body {
   text-align: center;
 }
 
-/* TÍTULOS */
 h1 {
   letter-spacing: 0.25em;
 }
@@ -26,7 +25,6 @@ h1 {
   letter-spacing: 0.15em;
 }
 
-/* TEXTO */
 .ritual {
   margin-top: 40px;
   line-height: 1.6;
@@ -38,9 +36,15 @@ h1 {
   opacity: 0.85;
 }
 
-/* INPUT */
-input {
+/* BLOQUE PREGUNTA */
+.bloque-pregunta {
   margin-top: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input {
   padding: 14px 24px;
   width: 80%;
   max-width: 460px;
@@ -49,17 +53,15 @@ input {
   border-radius: 999px;
   color: #fff;
   text-align: center;
-  font-size: 0.95em;
 }
 
 input::placeholder {
   color: rgba(255,255,255,0.5);
 }
 
-/* BOTÓN CONSULTAR */
-button {
-  margin-top: 35px;
-  padding: 12px 30px;
+#consultar {
+  margin-top: 24px;
+  padding: 12px 36px;
   border-radius: 999px;
   border: none;
   background: #6a5acd;
@@ -67,7 +69,6 @@ button {
   cursor: pointer;
 }
 
-/* INFO */
 .informativo {
   margin-top: 70px;
   font-size: 0.9em;
@@ -130,7 +131,6 @@ footer {
   opacity: 0.4;
 }
 
-/* ANIMACIONES */
 @keyframes aparecer {
   from {
     opacity: 0;
