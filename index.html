@@ -11,8 +11,8 @@
 
 <main class="oraculo">
 
-  <!-- RITUAL -->
-  <section id="ritual-contenedor">
+  <!-- VISTA CONSULTA -->
+  <section id="vista-consulta">
     <h1>Oráculo AM</h1>
     <h2 class="subtitulo">Anima Mundi</h2>
 
@@ -22,65 +22,64 @@
       Consulta.
     </p>
 
-    <p class="fade-in">
+    <p class="mensaje">
       No busques la respuesta que deseas.<br>
       Permite que llegue la respuesta.
     </p>
 
     <p class="preparacion">
       Formula una sola pregunta.<br>
-      Escríbela o sostenla en tu mente.<br>
+      Escríbela o mantenla clara en tu mente.<br>
       <em>La pregunta no se guarda ni se envía.</em>
     </p>
 
-    <div class="pregunta">
-      <input
-        type="text"
-        id="pregunta"
-        placeholder="Puedes escribir tu pregunta aquí (opcional)"
-        autocomplete="off"
-      >
-    </div>
+    <input
+      type="text"
+      id="pregunta"
+      placeholder="Puedes escribir tu pregunta aquí (opcional)"
+      autocomplete="off"
+    >
 
-    <div class="consulta">
-      <button id="consultar">Consultar</button>
+    <button id="consultar">Consultar</button>
+
+    <!-- ACERCA DE -->
+    <section class="informativo">
+      <h3>Acerca del Oráculo AM</h3>
+      <p>
+        El Oráculo AM es una herramienta simbólica.<br>
+        No predice, no impone, no decide.<br>
+        Refleja estados de consciencia.
+      </p>
+    </section>
+
+    <!-- HOMENAJE -->
+    <section class="informativo">
+      <h3>Homenaje</h3>
+      <p>
+        Al silencio.<br>
+        Al símbolo.<br>
+        A la escucha profunda.
+      </p>
+    </section>
+  </section>
+
+  <!-- VISTA RESPUESTA -->
+  <section id="vista-respuesta" class="oculto">
+    <div id="contenedor-respuesta">
+      <p id="texto-respuesta"></p>
+
+      <div class="acciones">
+        <button id="guardar">Guardar consulta</button>
+        <button id="volver">Volver</button>
+      </div>
     </div>
   </section>
 
-  <!-- RESPUESTA -->
-  <section id="respuesta" class="oculto">
-    <p id="texto-respuesta"></p>
-
-    <div class="acciones-respuesta">
-      <button id="guardar" class="pro">Guardar consulta ✧</button>
-      <button id="volver">Volver al silencio</button>
-    </div>
-  </section>
-
-  <!-- HISTORIAL (PRO) -->
+  <!-- HISTORIAL -->
   <section id="historial" class="oculto">
     <h3>Consultas guardadas conscientemente</h3>
     <div id="lista-historial"></div>
     <button id="borrar-historial">Borrar historial</button>
-  </section>
-
-  <!-- ACERCA DE -->
-  <section class="informativo">
-    <h3>Acerca del Oráculo AM</h3>
-    <p>
-      El Oráculo AM no predice ni aconseja.<br>
-      Refleja estados, procesos y silencios.<br>
-      Es una herramienta de contemplación.
-    </p>
-  </section>
-
-  <!-- HOMENAJE -->
-  <section class="informativo">
-    <h3>Homenaje</h3>
-    <p>
-      Este espacio honra la escucha profunda,<br>
-      el pensamiento simbólico y la conciencia en expansión.
-    </p>
   </section>
 
   <footer>
