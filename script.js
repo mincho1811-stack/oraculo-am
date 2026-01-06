@@ -1,5 +1,5 @@
-const ritual = document.getElementById("ritual-contenedor");
-const respuesta = document.getElementById("respuesta");
+const vistaConsulta = document.getElementById("vista-consulta");
+const vistaRespuesta = document.getElementById("vista-respuesta");
 const textoRespuesta = document.getElementById("texto-respuesta");
 
 const btnConsultar = document.getElementById("consultar");
@@ -12,85 +12,86 @@ const btnBorrarHistorial = document.getElementById("borrar-historial");
 
 const inputPregunta = document.getElementById("pregunta");
 
-/* RESPUESTAS AMPLIADAS */
+/* BANCO DE RESPUESTAS (AMPLIADO, CON REPETICIÓN POSIBLE) */
 const respuestas = [
   "Silencio.",
   "Observa.",
-  "Permite que se revele.",
+  "Permanece.",
+  "Espera.",
+  "Confía.",
+  "Acepta.",
+  "Detente.",
+  "Escucha.",
+
   "No es el momento.",
-  "La respuesta ya habita en ti.",
-  "Confía en el proceso que se despliega.",
-  "Detente antes de avanzar.",
-  "Aquello que buscas se transforma.",
-  "Escucha lo que no se dice.",
-  "El tiempo aún no ha madurado.",
-  "Hay más de una verdad en juego.",
-  "Acepta lo que emerge sin juicio.",
+  "Aún no.",
+  "Todavía.",
+  "Ahora no.",
+  "Permite que sea.",
+
+  "La respuesta no necesita palabras.",
+  "El silencio también responde.",
   "No fuerces la comprensión.",
-  "El sentido llegará cuando sueltes la pregunta.",
-  "Mira desde otro ángulo.",
-  "La claridad nace del reposo.",
-  "Todo movimiento comienza en quietud.",
-  "Esto no requiere acción inmediata.",
-  "Permanece atento.",
-  "Lo esencial no hace ruido."
+  "La claridad surge cuando sueltas.",
+  "Hay más de una verdad.",
+  "Lo evidente no es lo esencial.",
+  "No mires hacia afuera.",
+  "La pregunta ya transformó el camino.",
+
+  "El sentido se revela en quietud.",
+  "Nada falta en este instante.",
+  "Lo profundo no se apresura.",
+  "La comprensión llegará sin aviso.",
+  "El proceso es parte de la respuesta.",
+  "El símbolo se revelará cuando estés listo.",
+  "La incertidumbre también guía.",
+  "Permanece atento a lo sutil."
 ];
 
+/* OBTENER RESPUESTA (CON REPETICIÓN POSIBLE) */
 function obtenerRespuesta() {
   return respuestas[Math.floor(Math.random() * respuestas.length)];
 }
 
 /* CONSULTAR */
 btnConsultar.addEventListener("click", () => {
-  const respuestaElegida = obtenerRespuesta();
+  textoRespuesta.innerText = obtenerRespuesta();
 
-  textoRespuesta.innerText = respuestaElegida;
-
-  ritual.classList.add("oculto");
+  vistaConsulta.classList.add("oculto");
   historialSeccion.classList.add("oculto");
-
-  respuesta.classList.remove("oculto");
+  vistaRespuesta.classList.remove("oculto");
 
   btnGuardar.disabled = false;
-  btnGuardar.innerText = "Guardar consulta ✧";
 });
 
 /* VOLVER */
 btnVolver.addEventListener("click", () => {
-  respuesta.classList.add("oculto");
-  ritual.classList.remove("oculto");
+  vistaRespuesta.classList.add("oculto");
+  vistaConsulta.classList.remove("oculto");
   inputPregunta.value = "";
-
   cargarHistorial();
 });
 
-/* GUARDAR (PRO LOCAL) */
+/* GUARDAR */
 btnGuardar.addEventListener("click", () => {
-  const pregunta = inputPregunta.value || "Pregunta no escrita";
-  const respuestaTexto = textoRespuesta.innerText;
-
-  const registro = {
-    fecha: new Date().toLocaleString(),
-    pregunta,
-    respuesta: respuestaTexto
-  };
-
   const historial = JSON.parse(localStorage.getItem("oraculoAM")) || [];
-  historial.push(registro);
-  localStorage.setItem("oraculoAM", JSON.stringify(historial));
 
+  historial.push({
+    fecha: new Date().toLocaleString(),
+    pregunta: inputPregunta.value || "Pregunta no escrita",
+    respuesta: textoRespuesta.innerText
+  });
+
+  localStorage.setItem("oraculoAM", JSON.stringify(historial));
   btnGuardar.disabled = true;
-  btnGuardar.innerText = "Guardado ✨";
 });
 
 /* HISTORIAL */
 function cargarHistorial() {
   const historial = JSON.parse(localStorage.getItem("oraculoAM")) || [];
-
   if (historial.length === 0) return;
 
   listaHistorial.innerHTML = "";
-
   historial.forEach(item => {
     const div = document.createElement("div");
     div.className = "item-historial";
@@ -105,7 +106,6 @@ function cargarHistorial() {
   historialSeccion.classList.remove("oculto");
 }
 
-/* BORRAR HISTORIAL */
 btnBorrarHistorial.addEventListener("click", () => {
   localStorage.removeItem("oraculoAM");
   historialSeccion.classList.add("oculto");
