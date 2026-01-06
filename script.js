@@ -82,5 +82,23 @@ document.addEventListener("DOMContentLoaded", () => {
     guardarBtn.innerText = "Guardado ✓";
   }
 
+  const capa = document.getElementById("capa-oraculo");
+const volver = document.getElementById("volver");
+
+// Volver con botón
+volver.addEventListener("click", cerrarOraculo);
+
+// Volver con doble clic en la respuesta
+respuesta.addEventListener("dblclick", cerrarOraculo);
+
+function cerrarOraculo() {
+  capa.classList.remove("activa");
+
+  // opcional: limpiar respuesta
+  setTimeout(() => {
+    respuesta.innerHTML = "";
+  }, 800);
+}
+
 });
 
