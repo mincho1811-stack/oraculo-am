@@ -82,7 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
     guardarBtn.innerText = "Guardado ✓";
   }
 
-  const capa = document.getElementById("capa-oraculo");
+});
+
+const capa = document.getElementById("capa-oraculo");
 const volver = document.getElementById("volver");
 
 // Volver con botón
@@ -99,6 +101,3 @@ function cerrarOraculo() {
     respuesta.innerHTML = "";
   }, 800);
 }
-
-});
-
