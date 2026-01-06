@@ -11,8 +11,8 @@
 
 <main class="oraculo">
 
-  <!-- BLOQUE RITUAL -->
-  <section id="bloque-ritual">
+  <!-- RITUAL -->
+  <section id="ritual-contenedor">
     <h1>Oráculo AM</h1>
     <h2 class="subtitulo">Anima Mundi</h2>
 
@@ -47,103 +47,34 @@
     </div>
   </section>
 
-  <!-- SECCIONES INFORMATIVAS -->
-  <section id="sobre-oraculo" class="section">
-    <h2>Sobre el Oráculo AM</h2>
-    <p>El Oráculo AM es una herramienta simbólica de introspección.</p>
-    <p>No predice, no impone, no decide por ti.</p>
-    <p>Las respuestas no son sentencias. Son espejos.</p>
+  <!-- RESPUESTA -->
+  <section id="respuesta-contenedor" class="oculto">
+    <div id="respuesta"></div>
+
+    <button id="guardar" class="btn-secundario oculto">
+      Guardar consulta ✧
+    </button>
+
+    <button id="volver" class="btn-secundario">
+      Volver al silencio
+    </button>
   </section>
 
-  <section id="homenaje-eb" class="section homenaje">
-    <h3>Un homenaje</h3>
-    <p>
-      Este Oráculo honra el espíritu creativo de
-      <strong>Enrique Barrios</strong>,
-      autor de <em>Ami de las estrellas</em>.
-    </p>
-    <p class="firma">
-      Gracias por encender una luz que sigue iluminando.
-    </p>
-  </section>
-
-  <section id="aportes" class="section aportes">
-    <h2>Aportes conscientes</h2>
-    <p>Si este Oráculo te acompañó, puedes apoyar su existencia.</p>
-    <a href="https://ko-fi.com/oraculoam" target="_blank" class="btn-aporte">
-      🤍 Aportar en Ko-fi
-    </a>
-  </section>
-
-  <!-- PRO -->
-  <section class="version-pro section">
-    <h2>Versión PRO</h2>
-    <p class="pro-intro">
-      La versión esencial es gratuita.<br>
-      PRO habilita profundidad, memoria y expansión.
-    </p>
-
-    <div class="pro-grid">
-      <div>
-        <h3>Esencial</h3>
-        <ul>
-          <li>1 consulta por día</li>
-          <li>Sin historial</li>
-          <li>Español</li>
-        </ul>
-      </div>
-
-      <div>
-        <h3>PRO</h3>
-        <ul>
-          <li>Consultas ilimitadas</li>
-          <li>Historial personal</li>
-          <li>Idiomas adicionales</li>
-          <li>Tarot simbólico</li>
-        </ul>
-      </div>
-    </div>
+  <!-- HISTORIAL PRO -->
+  <section id="historial" class="oculto">
+    <h2>Consultas guardadas conscientemente</h2>
+    <div id="lista-historial"></div>
+    <button id="borrar-historial" class="btn-secundario">
+      Borrar historial
+    </button>
   </section>
 
   <footer>
     © Oráculo AM — Anima Mundi
   </footer>
 
-<section id="historial-pro" class="section oculto">
-  <h2>Historial</h2>
-  <p class="pro-intro">
-    Consultas guardadas conscientemente.
-  </p>
-
-  <div id="lista-historial"></div>
-
-  <button id="borrar-historial" class="btn-aporte">
-    Borrar historial
-  </button>
-</section>
-  
 </main>
 
-<!-- CAPA RITUAL -->
-<div id="capa-oraculo">
-  <div id="respuesta"></div>
-
-  <button id="volver" class="btn-volver">
-    Volver al silencio
-  </button>
-</div>
-
-  <div id="acciones-pro" class="oculto">
-  <button id="guardar-historial">
-    Guardar esta consulta
-  </button>
-</div>
-
-  <div id="acciones-pro" class="oculto">
-    <button id="guardar">Guardar en mi historial</button>
-  </div>
-</div>
-
-<script src="script.js"></script>
+<script src="script.js" defer></script>
 </body>
 </html>
