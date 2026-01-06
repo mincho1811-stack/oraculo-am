@@ -1,149 +1,119 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const botonConsultar = document.getElementById("consultar");
-  const contenedorRitual = document.getElementById("ritual-contenedor");
-  const contenedorRespuesta = document.getElementById("respuesta");
+  const botonVolver = document.getElementById("volver");
+  const botonGuardar = document.getElementById("guardar");
+  const botonBorrarHistorial = document.getElementById("borrar-historial");
+
+  const ritual = document.getElementById("ritual-contenedor");
+  const respuestaContenedor = document.getElementById("respuesta-contenedor");
+  const respuestaEl = document.getElementById("respuesta");
   const inputPregunta = document.getElementById("pregunta");
 
-  let banco = null;
-  let respuestaActual = [];
-  let preguntaActual = "";
+  const historialSeccion = document.getElementById("historial");
+  const listaHistorial = document.getElementById("lista-historial");
 
-  // --- CARGA DEL BANCO ---
+  let banco = null;
+  let ultimaRespuesta = "";
+  let ultimaPregunta = "";
+
   fetch("data/banco.json")
     .then(res => res.json())
     .then(data => banco = data);
 
-  // --- UTILIDADES ---
-  const tomar = (arr, n) =>
-    arr.sort(() => 0.5 - Math.random()).slice(0, n);
+  const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
 
-  const esPRO = () =>
-    localStorage.getItem("oraculoAM_PRO") === "true";
+  function mezclar(arr) {
+    return arr.sort(() => 0.5 - Math.random());
+  }
 
-  const fechaHora = () =>
-    new Date().toLocaleString();
-
-  // --- GENERADOR COMBINATORIO ---
   function generarRespuesta() {
-    const cantidades = [1, 3, 5];
-    const total = cantidades[Math.floor(Math.random() * cantidades.length)];
+    const cantidad = [1, 3, 5][Math.floor(Math.random() * 3)];
 
-    const tipos = ["palabras", "frases_cortas", "frases_largas"];
-    const tiposElegidos = tomar(tipos, Math.floor(Math.random() * 3) + 1);
+    const fuentes = mezclar([
+      { data: banco.palabras, tipo: "palabra" },
+      { data: banco.frases_cortas, tipo: "frase corta" },
+      { data: banco.frases_largas, tipo: "frase larga" }
+    ]);
 
     let resultado = [];
 
-    let restantes = total;
-
-    tiposElegidos.forEach((tipo, i) => {
-      let cantidad = i === tiposElegidos.length - 1
-        ? restantes
-        : Math.max(1, Math.floor(Math.random() * restantes));
-
-      restantes -= cantidad;
-
-      resultado.push(...tomar(banco[tipo], cantidad));
+    fuentes.forEach(f => {
+      if (resultado.length < cantidad) {
+        resultado.push(...mezclar(f.data).slice(0, 1));
+      }
     });
 
-    return tomar(resultado, total);
+    return resultado.slice(0, cantidad);
   }
 
-  // --- GUARDAR CONSULTA (PRO) ---
-  function guardarConsulta() {
-    const historial = JSON.parse(localStorage.getItem("oraculoAM_historial") || "[]");
-
-    historial.unshift({
-      fecha: fechaHora(),
-      pregunta: preguntaActual,
-      respuesta: respuestaActual.join(" ")
-    });
-
-    localStorage.setItem("oraculoAM_historial", JSON.stringify(historial));
-    mostrarHistorial();
-  }
-
-  // --- MOSTRAR HISTORIAL ---
-  function mostrarHistorial() {
-    if (!esPRO()) return;
-
-    const historial = JSON.parse(localStorage.getItem("oraculoAM_historial") || "[]");
-    if (!historial.length) return;
-
-    let html = `<section class="section"><h3>Consultas guardadas conscientemente</h3>`;
-
-    historial.forEach(item => {
-      html += `
-        <div class="historial-item">
-          <div class="fecha">${item.fecha}</div>
-          <p><strong>Pregunta:</strong> ${item.pregunta}</p>
-          <p><em>Respuesta:</em> ${item.respuesta}</p>
-        </div>
-      `;
-    });
-
-    html += `<button id="borrar-historial">Borrar historial</button></section>`;
-
-    contenedorRitual.insertAdjacentHTML("beforeend", html);
-
-    document.getElementById("borrar-historial").onclick = () => {
-      localStorage.removeItem("oraculoAM_historial");
-      location.reload();
-    };
-  }
-
-  // --- REGRESAR AL SILENCIO ---
-  function regresar() {
-    contenedorRespuesta.innerHTML = "";
-    contenedorRespuesta.style.opacity = 0;
-    contenedorRitual.style.display = "block";
-    mostrarHistorial();
-  }
-
-  // --- CONSULTA ---
   botonConsultar.addEventListener("click", () => {
 
     if (!banco) return;
 
-    // regla diaria (no-PRO)
-    const hoy = new Date().toDateString();
-    if (!esPRO() && localStorage.getItem("ultimaConsulta") === hoy) {
-      contenedorRespuesta.innerHTML = "EL ORÁCULO YA HABLÓ HOY.";
-      contenedorRespuesta.style.opacity = 1;
-      return;
+    ultimaPregunta = inputPregunta.value.trim() || "(no escrita)";
+    ultimaRespuesta = generarRespuesta().join("<br><br>");
+
+    ritual.classList.add("oculto");
+    respuestaContenedor.classList.remove("oculto");
+
+    respuestaEl.innerHTML = ultimaRespuesta;
+
+    if (esPro) {
+      botonGuardar.classList.remove("oculto");
     }
 
-    preguntaActual = inputPregunta.value.trim() || "(no escrita)";
     inputPregunta.value = "";
+  });
 
-    respuestaActual = generarRespuesta();
+  botonVolver.addEventListener("click", () => {
+    respuestaContenedor.classList.add("oculto");
+    ritual.classList.remove("oculto");
 
-    contenedorRitual.style.display = "none";
-    contenedorRespuesta.innerHTML = `
-      <div class="respuesta-texto">
-        ${respuestaActual.join("<br><br>")}
-      </div>
-    `;
-    contenedorRespuesta.style.opacity = 1;
-
-    if (!esPRO()) {
-      localStorage.setItem("ultimaConsulta", hoy);
+    if (esPro) {
+      mostrarHistorial();
     }
+  });
 
-    // interacción consciente
-    contenedorRespuesta.onclick = () => {
-      if (esPRO()) {
-        const btnGuardar = document.createElement("button");
-        btnGuardar.textContent = "Guardar consulta ✧";
-        btnGuardar.onclick = (e) => {
-          e.stopPropagation();
-          guardarConsulta();
-          btnGuardar.remove();
-        };
-        contenedorRespuesta.appendChild(btnGuardar);
-      }
-      contenedorRespuesta.ondblclick = regresar;
-    };
+  botonGuardar.addEventListener("click", () => {
+    if (!esPro) return;
+
+    const historial = JSON.parse(localStorage.getItem("oraculoAM_historial")) || [];
+
+    historial.unshift({
+      fecha: new Date().toLocaleString(),
+      pregunta: ultimaPregunta,
+      respuesta: ultimaRespuesta.replace(/<br><br>/g, " ")
+    });
+
+    localStorage.setItem("oraculoAM_historial", JSON.stringify(historial));
+    botonGuardar.innerText = "Guardado ✨";
+    botonGuardar.disabled = true;
+  });
+
+  function mostrarHistorial() {
+    const historial = JSON.parse(localStorage.getItem("oraculoAM_historial")) || [];
+
+    if (historial.length === 0) return;
+
+    historialSeccion.classList.remove("oculto");
+    listaHistorial.innerHTML = "";
+
+    historial.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "entrada-historial";
+      div.innerHTML = `
+        <p class="fecha">${item.fecha}</p>
+        <p><strong>Pregunta:</strong> ${item.pregunta}</p>
+        <p><em>Respuesta:</em> ${item.respuesta}</p>
+      `;
+      listaHistorial.appendChild(div);
+    });
+  }
+
+  botonBorrarHistorial.addEventListener("click", () => {
+    localStorage.removeItem("oraculoAM_historial");
+    historialSeccion.classList.add("oculto");
   });
 
 });
