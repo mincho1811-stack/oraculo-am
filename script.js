@@ -82,6 +82,66 @@ document.addEventListener("DOMContentLoaded", () => {
     guardarBtn.innerText = "Guardado ✓";
   }
 
+  const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
+
+const accionesPro = document.getElementById("acciones-pro");
+const seccionHistorial = document.getElementById("historial-pro");
+
+if (esPro) {
+  accionesPro.classList.remove("oculto");
+  seccionHistorial.classList.remove("oculto");
+}
+
+  const btnGuardar = document.getElementById("guardar-historial");
+
+btnGuardar.addEventListener("click", () => {
+  const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
+
+  const entrada = {
+    fecha: new Date().toLocaleString(),
+    pregunta: pregunta.value || "(no escrita)",
+    respuesta: respuesta.innerText
+  };
+
+  historial.unshift(entrada);
+  localStorage.setItem("historialAM", JSON.stringify(historial));
+
+  cargarHistorial();
+  btnGuardar.innerText = "Guardado ✨";
+  btnGuardar.disabled = true;
+});
+
+  const listaHistorial = document.getElementById("lista-historial");
+
+function cargarHistorial() {
+  const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
+  listaHistorial.innerHTML = "";
+
+  historial.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "entrada-historial";
+
+    div.innerHTML = `
+      <div class="fecha">${item.fecha}</div>
+      <div class="pregunta"><strong>Pregunta:</strong> ${item.pregunta}</div>
+      <div class="respuesta"><strong>Respuesta:</strong> ${item.respuesta}</div>
+    `;
+
+    listaHistorial.appendChild(div);
+  });
+}
+
+cargarHistorial();
+
+  const btnBorrar = document.getElementById("borrar-historial");
+
+btnBorrar.addEventListener("click", () => {
+  if (confirm("¿Deseas borrar todo el historial?")) {
+    localStorage.removeItem("historialAM");
+    cargarHistorial();
+  }
+});
+
 });
 
 const capa = document.getElementById("capa-oraculo");
