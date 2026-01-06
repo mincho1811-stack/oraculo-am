@@ -1,119 +1,112 @@
-document.addEventListener("DOMContentLoaded", () => {
+const ritual = document.getElementById("ritual-contenedor");
+const respuesta = document.getElementById("respuesta");
+const textoRespuesta = document.getElementById("texto-respuesta");
 
-  const botonConsultar = document.getElementById("consultar");
-  const botonVolver = document.getElementById("volver");
-  const botonGuardar = document.getElementById("guardar");
-  const botonBorrarHistorial = document.getElementById("borrar-historial");
+const btnConsultar = document.getElementById("consultar");
+const btnVolver = document.getElementById("volver");
+const btnGuardar = document.getElementById("guardar");
 
-  const ritual = document.getElementById("ritual-contenedor");
-  const respuestaContenedor = document.getElementById("respuesta-contenedor");
-  const respuestaEl = document.getElementById("respuesta");
-  const inputPregunta = document.getElementById("pregunta");
+const historialSeccion = document.getElementById("historial");
+const listaHistorial = document.getElementById("lista-historial");
+const btnBorrarHistorial = document.getElementById("borrar-historial");
 
-  const historialSeccion = document.getElementById("historial");
-  const listaHistorial = document.getElementById("lista-historial");
+const inputPregunta = document.getElementById("pregunta");
 
-  let banco = null;
-  let ultimaRespuesta = "";
-  let ultimaPregunta = "";
+/* RESPUESTAS AMPLIADAS */
+const respuestas = [
+  "Silencio.",
+  "Observa.",
+  "Permite que se revele.",
+  "No es el momento.",
+  "La respuesta ya habita en ti.",
+  "Confía en el proceso que se despliega.",
+  "Detente antes de avanzar.",
+  "Aquello que buscas se transforma.",
+  "Escucha lo que no se dice.",
+  "El tiempo aún no ha madurado.",
+  "Hay más de una verdad en juego.",
+  "Acepta lo que emerge sin juicio.",
+  "No fuerces la comprensión.",
+  "El sentido llegará cuando sueltes la pregunta.",
+  "Mira desde otro ángulo.",
+  "La claridad nace del reposo.",
+  "Todo movimiento comienza en quietud.",
+  "Esto no requiere acción inmediata.",
+  "Permanece atento.",
+  "Lo esencial no hace ruido."
+];
 
-  fetch("data/banco.json")
-    .then(res => res.json())
-    .then(data => banco = data);
+function obtenerRespuesta() {
+  return respuestas[Math.floor(Math.random() * respuestas.length)];
+}
 
-  const esPro = localStorage.getItem("oraculoAM_PRO") === "true";
+/* CONSULTAR */
+btnConsultar.addEventListener("click", () => {
+  const respuestaElegida = obtenerRespuesta();
 
-  function mezclar(arr) {
-    return arr.sort(() => 0.5 - Math.random());
-  }
+  textoRespuesta.innerText = respuestaElegida;
 
-  function generarRespuesta() {
-    const cantidad = [1, 3, 5][Math.floor(Math.random() * 3)];
+  ritual.classList.add("oculto");
+  historialSeccion.classList.add("oculto");
 
-    const fuentes = mezclar([
-      { data: banco.palabras, tipo: "palabra" },
-      { data: banco.frases_cortas, tipo: "frase corta" },
-      { data: banco.frases_largas, tipo: "frase larga" }
-    ]);
+  respuesta.classList.remove("oculto");
 
-    let resultado = [];
+  btnGuardar.disabled = false;
+  btnGuardar.innerText = "Guardar consulta ✧";
+});
 
-    fuentes.forEach(f => {
-      if (resultado.length < cantidad) {
-        resultado.push(...mezclar(f.data).slice(0, 1));
-      }
-    });
+/* VOLVER */
+btnVolver.addEventListener("click", () => {
+  respuesta.classList.add("oculto");
+  ritual.classList.remove("oculto");
+  inputPregunta.value = "";
 
-    return resultado.slice(0, cantidad);
-  }
+  cargarHistorial();
+});
 
-  botonConsultar.addEventListener("click", () => {
+/* GUARDAR (PRO LOCAL) */
+btnGuardar.addEventListener("click", () => {
+  const pregunta = inputPregunta.value || "Pregunta no escrita";
+  const respuestaTexto = textoRespuesta.innerText;
 
-    if (!banco) return;
+  const registro = {
+    fecha: new Date().toLocaleString(),
+    pregunta,
+    respuesta: respuestaTexto
+  };
 
-    ultimaPregunta = inputPregunta.value.trim() || "(no escrita)";
-    ultimaRespuesta = generarRespuesta().join("<br><br>");
+  const historial = JSON.parse(localStorage.getItem("oraculoAM")) || [];
+  historial.push(registro);
+  localStorage.setItem("oraculoAM", JSON.stringify(historial));
 
-    ritual.classList.add("oculto");
-    respuestaContenedor.classList.remove("oculto");
+  btnGuardar.disabled = true;
+  btnGuardar.innerText = "Guardado ✨";
+});
 
-    respuestaEl.innerHTML = ultimaRespuesta;
+/* HISTORIAL */
+function cargarHistorial() {
+  const historial = JSON.parse(localStorage.getItem("oraculoAM")) || [];
 
-    if (esPro) {
-      botonGuardar.classList.remove("oculto");
-    }
+  if (historial.length === 0) return;
 
-    inputPregunta.value = "";
+  listaHistorial.innerHTML = "";
+
+  historial.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "item-historial";
+    div.innerHTML = `
+      <small>${item.fecha}</small><br>
+      <strong>Pregunta:</strong> ${item.pregunta}<br>
+      <strong>Respuesta:</strong> ${item.respuesta}
+    `;
+    listaHistorial.appendChild(div);
   });
 
-  botonVolver.addEventListener("click", () => {
-    respuestaContenedor.classList.add("oculto");
-    ritual.classList.remove("oculto");
+  historialSeccion.classList.remove("oculto");
+}
 
-    if (esPro) {
-      mostrarHistorial();
-    }
-  });
-
-  botonGuardar.addEventListener("click", () => {
-    if (!esPro) return;
-
-    const historial = JSON.parse(localStorage.getItem("oraculoAM_historial")) || [];
-
-    historial.unshift({
-      fecha: new Date().toLocaleString(),
-      pregunta: ultimaPregunta,
-      respuesta: ultimaRespuesta.replace(/<br><br>/g, " ")
-    });
-
-    localStorage.setItem("oraculoAM_historial", JSON.stringify(historial));
-    botonGuardar.innerText = "Guardado ✨";
-    botonGuardar.disabled = true;
-  });
-
-  function mostrarHistorial() {
-    const historial = JSON.parse(localStorage.getItem("oraculoAM_historial")) || [];
-
-    if (historial.length === 0) return;
-
-    historialSeccion.classList.remove("oculto");
-    listaHistorial.innerHTML = "";
-
-    historial.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "entrada-historial";
-      div.innerHTML = `
-        <p class="fecha">${item.fecha}</p>
-        <p><strong>Pregunta:</strong> ${item.pregunta}</p>
-        <p><em>Respuesta:</em> ${item.respuesta}</p>
-      `;
-      listaHistorial.appendChild(div);
-    });
-  }
-
-  botonBorrarHistorial.addEventListener("click", () => {
-    localStorage.removeItem("oraculoAM_historial");
-    historialSeccion.classList.add("oculto");
-  });
-
+/* BORRAR HISTORIAL */
+btnBorrarHistorial.addEventListener("click", () => {
+  localStorage.removeItem("oraculoAM");
+  historialSeccion.classList.add("oculto");
 });
