@@ -330,3 +330,34 @@ footer {
   }
 }
 
+.oculto {
+  display: none;
+}
+
+#historial-pro {
+  margin-top: 6rem;
+}
+
+.entrada-historial {
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.2rem;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.entrada-historial .fecha {
+  opacity: 0.6;
+  font-size: 0.7rem;
+  margin-bottom: 0.4rem;
+}
+
+.entrada-historial .pregunta {
+  opacity: 0.8;
+  margin-bottom: 0.4rem;
+}
+
+.entrada-historial .respuesta {
+  font-style: italic;
+}
