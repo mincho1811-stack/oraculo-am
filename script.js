@@ -16,19 +16,15 @@ const respuestas = [
   "Silencio.",
   "Observa.",
   "Permanece.",
-  "Espera.",
   "Confía.",
   "Acepta.",
   "Escucha.",
   "No es el momento.",
-  "Todavía.",
   "Permite que sea.",
-  "La respuesta no necesita palabras.",
   "El silencio también responde.",
   "No fuerces la comprensión.",
   "Hay más de una verdad.",
   "La claridad surge cuando sueltas.",
-  "El sentido se revela en quietud.",
   "Nada falta en este instante.",
   "La incertidumbre también guía."
 ];
@@ -51,7 +47,7 @@ btnConsultar.addEventListener("click", () => {
 /* VOLVER */
 btnVolver.addEventListener("click", () => {
   vistaRespuesta.classList.add("oculto");
-  textoRespuesta.innerText = ""; // LIMPIA RESPUESTA
+  textoRespuesta.innerText = "";
   vistaConsulta.classList.remove("oculto");
   inputPregunta.value = "";
   cargarHistorial();
