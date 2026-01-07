@@ -128,3 +128,31 @@ footer {
   font-size: 0.75rem;
   opacity: 0.4;
 }
+
+/* ===== HOME · IMAGEN MINIMAL ===== */
+.home-oracle {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.home-crystal {
+  width: 150px;
+  opacity: 0.85;
+}
+
+/* ===== RESPUESTA · SELLO MODERNO ===== */
+.oracle-seal {
+  margin-top: 4rem;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.seal-crystal {
+  width: 65px;
+  margin-bottom: 6px;
+}
+
+.oracle-sign {
+  font-style: italic;
+  font-size: 0.85rem;
+}
