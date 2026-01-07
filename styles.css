@@ -152,6 +152,11 @@ footer {
   margin-bottom: 6px;
 }
 
+.firma-personal {
+  width: 65px;
+  margin-bottom: 6px;
+}
+
 .oracle-sign {
   font-style: italic;
   font-size: 0.85rem;
