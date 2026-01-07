@@ -1,93 +1,53 @@
 const btnConsultar = document.getElementById("consultar");
 const btnVolver = document.getElementById("volver");
-const btnGuardar = document.getElementById("guardar");
 
 const vistaConsulta = document.getElementById("vista-consulta");
 const vistaRespuesta = document.getElementById("vista-respuesta");
 
-const inputPregunta = document.getElementById("pregunta");
 const respuestaEl = document.getElementById("respuesta");
 
-const historialLista = document.getElementById("historial-lista");
-const borrarHistorial = document.getElementById("borrar-historial");
-const aporte = document.getElementById("aporte");
-
 const banco = {
-  palabras: ["OBSERVA", "SILENCIO", "UMBRAL", "PAUSA", "RECUERDA"],
+  palabras: [
+    "SILENCIO", "UMBRAL", "PAUSA", "OBSERVA", "RECUERDA",
+    "ESPERA", "CAMBIO", "CLARIDAD", "ORIGEN"
+  ],
   frases_cortas: [
-    "TODO CAMBIO COMIENZA DENTRO.",
+    "TODO COMIENZA DENTRO.",
     "NO ES EL MOMENTO.",
-    "CONFÍA EN EL PROCESO."
+    "CONFÍA EN EL PROCESO.",
+    "LO SIMPLE ES PROFUNDO."
   ],
   frases_largas: [
     "LO QUE BUSCAS NO SE REVELA CUANDO INSISTES, SINO CUANDO PERMITES.",
-    "A VECES LA RESPUESTA ES CAMINAR SIN SABER."
+    "A VECES LA RESPUESTA ES CAMINAR SIN SABER HACIA DÓNDE.",
+    "CUANDO CESAS LA BÚSQUEDA, LA RESPUESTA APARECE."
   ]
 };
 
 function respuestaAleatoria() {
-  const grupos = [
-    banco.palabras,
-    banco.frases_cortas,
-    banco.frases_largas
+  const tipos = [
+    { arr: banco.palabras, n: [1,3,5] },
+    { arr: banco.frases_cortas, n: [1,3] },
+    { arr: banco.frases_largas, n: [1] }
   ];
-  const grupo = grupos[Math.floor(Math.random() * grupos.length)];
-  const cantidad = [1, 3, 5][Math.floor(Math.random() * 3)];
-  return grupo.sort(() => 0.5 - Math.random()).slice(0, cantidad).join("<br><br>");
+
+  const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+  const cantidad = tipo.n[Math.floor(Math.random() * tipo.n.length)];
+
+  return tipo.arr
+    .sort(() => 0.5 - Math.random())
+    .slice(0, cantidad)
+    .join("<br><br>");
 }
 
 btnConsultar.onclick = () => {
   respuestaEl.innerHTML = respuestaAleatoria();
   vistaConsulta.hidden = true;
   vistaRespuesta.hidden = false;
-  aporte.hidden = true;
 };
 
 btnVolver.onclick = () => {
   vistaRespuesta.hidden = true;
   vistaConsulta.hidden = false;
   respuestaEl.innerHTML = "";
-  aporte.hidden = false;
 };
-
-btnGuardar.onclick = () => {
-  const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
-  historial.unshift({
-    pregunta: inputPregunta.value || "(no escrita)",
-    respuesta: respuestaEl.innerText,
-    fecha: new Date().toLocaleString()
-  });
-  localStorage.setItem("historialAM", JSON.stringify(historial));
-  cargarHistorial();
-};
-
-borrarHistorial.onclick = () => {
-  localStorage.removeItem("historialAM");
-  cargarHistorial();
-};
-
-function cargarHistorial() {
-  historialLista.innerHTML = "";
-  const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
-
-  historial.forEach((item, i) => {
-    const div = document.createElement("div");
-    div.className = "historial-item";
-    div.innerHTML = `
-      <strong>${item.fecha}</strong><br>
-      Pregunta: ${item.pregunta}<br>
-      Respuesta: ${item.respuesta}<br>
-      <button onclick="borrarItem(${i})">Borrar</button>
-    `;
-    historialLista.appendChild(div);
-  });
-}
-
-window.borrarItem = (i) => {
-  const historial = JSON.parse(localStorage.getItem("historialAM")) || [];
-  historial.splice(i, 1);
-  localStorage.setItem("historialAM", JSON.stringify(historial));
-  cargarHistorial();
-};
-
-cargarHistorial();
