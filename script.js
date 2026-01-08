@@ -77,6 +77,8 @@ btnConsultar.onclick = () => {
 
   respuestaEl.innerHTML = generarRespuesta();
 
+  document.querySelector(".oracle-seal").style.display = "block";
+
   localStorage.setItem("oraculoAM_ultimaConsulta", hoy);
 
   vistaConsulta.hidden = true;
