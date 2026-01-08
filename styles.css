@@ -142,14 +142,14 @@ footer {
 
 /* ===== RESPUESTA · SELLO MODERNO ===== */
 .oracle-seal {
-  margin-top: 4rem;
+  margin-top: 3.2rem; /* antes 4rem */
   text-align: center;
   opacity: 0.6;
 }
 
 .seal-crystal {
   width: 65px;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .oracle-sign {
@@ -165,8 +165,10 @@ footer {
 }
 
 .firma-personal {
-  width: 65px;
-  margin-bottom: 6px;
+  display: block;
+  margin: 16px auto 0; /* más aire respecto al texto */
+  width: 110px;
+  opacity: 0.38;
 }
 
 .oracle-sign {
