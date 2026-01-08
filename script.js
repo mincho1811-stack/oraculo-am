@@ -64,12 +64,16 @@ btnConsultar.onclick = () => {
   const hoy = hoyString();
 
   if (ultima === hoy) {
-    respuestaEl.innerHTML =
-      "EL ORÁCULO YA HABLÓ HOY.<br><br>REGRESA MAÑANA.";
-    vistaConsulta.hidden = true;
-    vistaRespuesta.hidden = false;
-    return;
-  }
+  respuestaEl.innerHTML =
+    "EL ORÁCULO YA HABLÓ HOY.<br><br>REGRESA MAÑANA.";
+
+  document.querySelector(".oracle-seal").style.display = "none";
+
+  vistaConsulta.hidden = true;
+  vistaRespuesta.hidden = false;
+  return;
+}
+
 
   respuestaEl.innerHTML = generarRespuesta();
 
