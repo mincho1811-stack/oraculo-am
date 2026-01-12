@@ -1,3 +1,5 @@
+const ES_PRO = true; // cambiar a false para volver a FREE
+
 const btnConsultar = document.getElementById("consultar");
 const btnVolver = document.getElementById("volver");
 
