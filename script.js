@@ -30,6 +30,14 @@ const banco = {
   ]
 };
 
+let bancoPRO = null;
+
+if (ES_PRO) {
+  fetch("data/banco_pro.json")
+    .then(res => res.json())
+    .then(data => bancoPRO = data);
+}
+
 // --------- UTILIDADES ---------
 function hoyString() {
   return new Date().toDateString();
@@ -39,8 +47,23 @@ function elegir(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function saleArcano() {
+  return Math.random() < 0.2; // ~20%
+}
+
+function arcanoInvertido() {
+  return Math.random() < 0.35; // 35%
+}
+
 // --------- GENERAR RESPUESTA ---------
 function generarRespuesta() {
+
+  // --- CASO PRO + ARCANO ---
+  if (ES_PRO && saleArcano()) {
+    return generarArcano();
+  }
+
+  // --- RESPUESTA NORMAL (igual que antes) ---
   const totales = [1, 3, 5];
   const total = elegir(totales);
 
@@ -52,12 +75,42 @@ function generarRespuesta() {
     banco.frases_largas
   ];
 
+  // PRO: se amplían fuentes
+  if (ES_PRO && bancoPRO) {
+    fuentes.push(
+      bancoPRO.palabras_pro,
+      bancoPRO.frases_cortas_pro,
+      bancoPRO.frases_largas_pro
+    );
+  }
+
   while (respuesta.length < total) {
     const fuente = elegir(fuentes);
     respuesta.push(elegir(fuente));
   }
 
-  return respuesta.join("<br><br>");
+  return {
+    tipo: "texto",
+    items: respuesta
+  };
+}
+
+function generarArcano() {
+  if (!bancoPRO || !bancoPRO.arcanos_mayores) return null;
+
+  const arcano = elegir(bancoPRO.arcanos_mayores);
+  const invertido = arcanoInvertido();
+
+  return {
+    tipo: "arcano",
+    numero: arcano.numero,
+    nombre: arcano.nombre,
+    imagen: arcano.imagen,
+    interpretacion: invertido
+      ? arcano.invertido.interpretacion_corta
+      : arcano.derecho.interpretacion_corta,
+    invertido
+  };
 }
 
 // --------- CONSULTAR ---------
@@ -77,7 +130,17 @@ btnConsultar.onclick = () => {
 }
 
 
-  respuestaEl.innerHTML = generarRespuesta();
+  const resultado = generarRespuesta();
+
+if (resultado.tipo === "arcano") {
+  respuestaEl.innerHTML = `
+    <img src="${resultado.imagen}" style="max-width:240px; margin-bottom:1.2rem;">
+    <div>${resultado.interpretacion}</div>
+  `;
+} else {
+  respuestaEl.innerHTML = resultado.items.join("<br><br>");
+}
+
 
   document.querySelector(".oracle-seal").style.display = "block";
 
