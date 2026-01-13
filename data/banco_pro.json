@@ -1,0 +1,36 @@
+{
+  "palabras_pro": [
+    "PORTAL INTERNO",
+    "SILENCIO FECUNDO",
+    "CENTRO INVISIBLE",
+    "GESTACIÓN",
+    "RESONANCIA"
+  ],
+
+  "frases_cortas_pro": [
+    "Algo se está reordenando.",
+    "No todo debe revelarse ahora.",
+    "La señal aún madura.",
+    "El movimiento es interno."
+  ],
+
+  "frases_largas_pro": [
+    "Cuando no fuerzas la respuesta, lo esencial comienza a mostrarse de otra forma.",
+    "La claridad no siempre llega como certeza, a veces llega como pausa consciente.",
+    "Hay procesos que solo se comprenden cuando se atraviesan sin prisa."
+  ],
+
+  "arcanos_mayores": [
+    {
+      "numero": "I",
+      "nombre": "El Mago",
+      "imagen": "img/tarot/I_el_mago.jpg",
+      "derecho": {
+        "interpretacion_corta": "Capacidad consciente de iniciar y canalizar la energía."
+      },
+      "invertido": {
+        "interpretacion_corta": "Energía dispersa o poder aún no reconocido."
+      }
+    }
+  ]
+}
