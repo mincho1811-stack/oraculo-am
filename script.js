@@ -55,15 +55,28 @@ function arcanoInvertido() {
   return Math.random() < 0.35; // 35%
 }
 
+function generarArcano() {
+  if (!bancoPRO || !bancoPRO.arcanos_mayores) return null;
+
+  const arcano = elegir(bancoPRO.arcanos_mayores);
+  const invertido = arcanoInvertido();
+
+  return {
+    tipo: "arcano",
+    imagen: arcano.imagen,
+    interpretacion: invertido
+      ? arcano.invertido.interpretacion_corta
+      : arcano.derecho.interpretacion_corta
+  };
+}
+
 // --------- GENERAR RESPUESTA ---------
 function generarRespuesta() {
 
-  // --- CASO PRO + ARCANO ---
   if (ES_PRO && saleArcano()) {
     return generarArcano();
   }
 
-  // --- RESPUESTA NORMAL (igual que antes) ---
   const totales = [1, 3, 5];
   const total = elegir(totales);
 
@@ -75,7 +88,6 @@ function generarRespuesta() {
     banco.frases_largas
   ];
 
-  // PRO: se amplían fuentes
   if (ES_PRO && bancoPRO) {
     fuentes.push(
       bancoPRO.palabras_pro,
@@ -95,23 +107,6 @@ function generarRespuesta() {
   };
 }
 
-function generarArcano() {
-  if (!bancoPRO || !bancoPRO.arcanos_mayores) return null;
-
-  const arcano = elegir(bancoPRO.arcanos_mayores);
-  const invertido = arcanoInvertido();
-
-  return {
-    tipo: "arcano",
-    numero: arcano.numero,
-    nombre: arcano.nombre,
-    imagen: arcano.imagen,
-    interpretacion: invertido
-      ? arcano.invertido.interpretacion_corta
-      : arcano.derecho.interpretacion_corta,
-    invertido
-  };
-}
 
 // --------- CONSULTAR ---------
 btnConsultar.onclick = () => {
