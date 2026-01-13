@@ -150,4 +150,6 @@ btnVolver.onclick = () => {
 
   respuestaEl.innerHTML = "";
   inputPregunta.value = "";
+
+  window.scrollTo(0, 0);
 };
