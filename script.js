@@ -35,12 +35,6 @@ const banco = {
   ]
 };
 
-// --------- ARCANOS MAYORES (BASE PROVISIONAL) ---------
-const arcanosMayores = [
-  { romano: "0", nombreES: "El Loco" },
-  { romano: "I", nombreES: "El Mago" },
-  { romano: "II", nombreES: "La Sacerdotisa" }
-];
 
 // --------- UTILIDADES ---------
 function hoyString() {
