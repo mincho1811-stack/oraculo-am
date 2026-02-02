@@ -73,16 +73,6 @@ function generarArcano() {
 // --------- GENERAR RESPUESTA ---------
 function generarRespuesta() {
 
-  // --- PRO: posibilidad de Arcano Mayor ---
-  if (modoActual === "pro") {
-    const chanceArcano = Math.random();
-
-    // 25% de probabilidad
-    if (chanceArcano < 0.25) {
-      generarArcanoMayor();
-      return;
-    }
-  }
   
   if (ES_PRO && saleArcano()) {
     return generarArcano();
