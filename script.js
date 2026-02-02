@@ -1,3 +1,8 @@
+// --------- MODO PRO (pruebas) ---------
+const PRO_ACTIVO = true;
+const MAX_CONSULTAS_PRO = 7;
+
+
 const ES_PRO = true; // cambiar a false para volver a FREE
 
 const btnConsultar = document.getElementById("consultar");
@@ -114,13 +119,22 @@ btnConsultar.onclick = () => {
   const ultima = localStorage.getItem("oraculoAM_ultimaConsulta");
   const hoy = hoyString();
 
-  if (ultima === hoy) {
+  const contadorKey = "oraculoAM_contadorHoy";
+let contadorHoy = parseInt(localStorage.getItem(contadorKey)) || 0;
+
+if (ultima === hoy) {
+  if (!PRO_ACTIVO || contadorHoy >= MAX_CONSULTAS_PRO) {
     respuestaEl.innerHTML =
       "EL ORÁCULO YA HABLÓ HOY.<br><br>REGRESA MAÑANA.";
     vistaConsulta.hidden = true;
     vistaRespuesta.hidden = false;
     return;
   }
+} else {
+  // Día nuevo: reiniciar contador
+  contadorHoy = 0;
+}
+
 
   const resultado = generarRespuesta();
 
@@ -138,6 +152,10 @@ btnConsultar.onclick = () => {
   }
 
   localStorage.setItem("oraculoAM_ultimaConsulta", hoy);
+
+  contadorHoy++;
+localStorage.setItem("oraculoAM_contadorHoy", contadorHoy);
+
 
   vistaConsulta.hidden = true;
   vistaRespuesta.hidden = false;
