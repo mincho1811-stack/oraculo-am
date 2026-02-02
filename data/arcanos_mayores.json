@@ -1,0 +1,23 @@
+[
+  {
+    "romano": "0",
+    "nombre": "El Loco",
+    "imagen": "img/tarot/00_el_loco.jpg",
+    "derecho": "Inicio, apertura, confianza en el viaje del alma.",
+    "invertido": "Impulsividad, dispersión, miedo a avanzar."
+  },
+  {
+    "romano": "I",
+    "nombre": "El Mago",
+    "imagen": "img/tarot/01_el_mago.jpg",
+    "derecho": "Voluntad consciente, poder creador, manifestación.",
+    "invertido": "Energía bloqueada, duda, manipulación."
+  },
+  {
+    "romano": "II",
+    "nombre": "La Sacerdotisa",
+    "imagen": "img/tarot/02_la_sacerdotisa.jpg",
+    "derecho": "Intuición profunda, sabiduría interior, silencio fértil.",
+    "invertido": "Desconexión interna, secretos no escuchados."
+  }
+]
