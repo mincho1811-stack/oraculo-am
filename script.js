@@ -35,6 +35,12 @@ const banco = {
   ]
 };
 
+let arcanosMayores = [];
+
+fetch("data/arcanos_mayores.json")
+  .then(res => res.json())
+  .then(data => arcanosMayores = data);
+
 
 // --------- UTILIDADES ---------
 function hoyString() {
@@ -51,23 +57,29 @@ function saleArcanoMayor() {
 }
 
 function generarArcanoMayor() {
+  if (!arcanosMayores.length) {
+    return "<p>Cargando el oráculo...</p>";
+  }
+
   const carta = elegir(arcanosMayores);
   const esDerecho = Math.random() < PROB_DERECHO;
 
-  let titulo = `${carta.romano}. ${carta.nombreES}`;
+  let titulo = `${carta.romano}. ${carta.nombre}`;
   if (!esDerecho) titulo += " (invertido)";
+
+  const interpretacion = esDerecho
+    ? carta.derecho
+    : carta.invertido;
 
   return `
     <div class="arcano">
       <h2>${titulo}</h2>
-      <p class="interpretacion">
-        ${esDerecho
-          ? "Energía disponible, apertura del camino."
-          : "Bloqueo interno, resistencia o aprendizaje pendiente."}
-      </p>
+      <img src="${carta.imagen}" style="max-width:260px; margin:1.2rem 0;">
+      <p class="interpretacion">${interpretacion}</p>
     </div>
   `;
 }
+
 
 // --------- RESPUESTA GENERAL ---------
 function generarRespuesta() {
