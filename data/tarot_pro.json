@@ -1,0 +1,29 @@
+[
+  {
+    "id": 0,
+    "romano": "0",
+    "nombre": "El Loco",
+    "slug": "el_loco",
+    "imagen": "img/tarot/00_el_loco.jpg",
+    "derecho": "Apertura al camino, confianza en lo desconocido.",
+    "invertido": "Temor al salto, desconexión de la intuición."
+  },
+  {
+    "id": 1,
+    "romano": "I",
+    "nombre": "El Mago",
+    "slug": "el_mago",
+    "imagen": "img/tarot/01_el_mago.jpg",
+    "derecho": "Capacidad consciente de crear y dirigir la energía.",
+    "invertido": "Poder disperso o duda sobre la propia capacidad."
+  },
+  {
+    "id": 2,
+    "romano": "II",
+    "nombre": "La Sacerdotisa",
+    "slug": "la_sacerdotisa",
+    "imagen": "img/tarot/02_la_sacerdotisa.jpg",
+    "derecho": "Escucha interior y acceso al conocimiento profundo.",
+    "invertido": "Desconexión interna o bloqueo intuitivo."
+  }
+]
