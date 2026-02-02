@@ -71,13 +71,19 @@ function generarArcanoMayor() {
     ? carta.derecho
     : carta.invertido;
 
-  return `
-    <div class="arcano">
-      <h2>${titulo}</h2>
-      <img src="/${carta.imagen}" style="max-width:260px; margin:1.2rem 0;">
-      <p class="interpretacion">${interpretacion}</p>
-    </div>
-  `;
+  const rotacion = esDerecho ? "rotate(0deg)" : "rotate(180deg)";
+
+return `
+  <div class="arcano">
+    <h2>${titulo}</h2>
+    <img 
+      src="/${carta.imagen}" 
+      style="max-width:260px; margin:1.2rem 0; transform:${rotacion};"
+    >
+    <p class="interpretacion">${interpretacion}</p>
+  </div>
+`;
+
 }
 
 
