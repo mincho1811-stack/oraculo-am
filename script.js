@@ -73,12 +73,15 @@ function generarArcanoMayor() {
 
   const rotacion = esDerecho ? "rotate(0deg)" : "rotate(180deg)";
 
+const rotacion = esDerecho ? "rotate(0deg)" : "rotate(180deg)";
+
 return `
   <div class="arcano">
-    <h2>${titulo}</h2>
+    <h2 class="arcano-titulo">${titulo}</h2>
     <img 
       src="/${carta.imagen}" 
-      style="max-width:260px; margin:1.2rem 0; transform:${rotacion};"
+      class="arcano-img"
+      style="transform:${rotacion};"
     >
     <p class="interpretacion">${interpretacion}</p>
   </div>
