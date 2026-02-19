@@ -129,6 +129,34 @@ footer {
   opacity: 0.4;
 }
 
+.arcano {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.arcano-titulo {
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+}
+
+.arcano-img {
+  max-width: 260px;
+  width: 100%;
+  margin: 0 auto 1.8rem auto;
+  display: block;
+  transition: transform 0.6s ease;
+  border-radius: 8px;
+}
+
+.interpretacion {
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+
 /* ===== HOME · IMAGEN MINIMAL ===== */
 .home-oracle {
   text-align: center;
