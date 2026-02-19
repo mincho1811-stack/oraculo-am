@@ -135,10 +135,11 @@ footer {
 }
 
 .arcano-titulo {
-  font-size: 1.4rem;
-  letter-spacing: 2px;
-  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  margin-bottom: 1.8rem;
 }
+
 
 .arcano-img {
   max-width: 260px;
@@ -147,6 +148,7 @@ footer {
   display: block;
   transition: transform 0.6s ease;
   border-radius: 8px;
+  filter: contrast(1.05);
 }
 
 .interpretacion {
