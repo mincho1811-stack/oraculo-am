@@ -1,10 +1,17 @@
 body {
   margin: 0;
   font-family: Georgia, serif;
-  background: linear-gradient(180deg, #1b1f3b, #2e1a47);
-  color: #ffffff;
+  color: white;
   display: flex;
   justify-content: center;
+  background: radial-gradient(circle at center, #2e1a47, #0f1123);
+  animation: fondoRespira 12s ease-in-out infinite;
+}
+
+/* RESPIRACIÓN DEL FONDO */
+@keyframes fondoRespira {
+  0%,100% { background: radial-gradient(circle at center, #2e1a47, #0f1123); }
+  50% { background: radial-gradient(circle at center, #3a2060, #0a0c1a); }
 }
 
 .oraculo {
@@ -13,13 +20,15 @@ body {
   text-align: center;
 }
 
-h1 {
-  margin-bottom: 0.2rem;
+/* CONSULTA */
+.home-crystal {
+  width: 140px;
+  opacity: 0.85;
 }
 
 .subtitulo {
-  font-size: 0.85rem;
-  letter-spacing: 0.25em;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
   opacity: 0.6;
   text-transform: uppercase;
 }
@@ -30,34 +39,21 @@ h1 {
 }
 
 .preparacion {
-  margin-top: 1.6rem;
-  opacity: 0.85;
-}
-
-.preparacion em {
-  display: block;
-  font-size: 0.8rem;
-  opacity: 0.6;
-}
-
-.pregunta {
-  display: flex;
-  justify-content: center;
-  margin-top: 1.4rem;
+  margin-top: 1.5rem;
+  opacity: 0.8;
 }
 
 .pregunta input {
   width: 100%;
   max-width: 420px;
-  padding: 0.9rem 1.2rem;
+  padding: 0.9rem;
   border-radius: 999px;
   border: none;
-  font-family: Georgia, serif;
   text-align: center;
 }
 
 button {
-  margin-top: 1.6rem;
+  margin-top: 1.5rem;
   padding: 0.8rem 2.4rem;
   border-radius: 999px;
   border: none;
@@ -68,182 +64,67 @@ button {
 
 button.secundario {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.35);
-  opacity: 0.5;
+  border: 1px solid rgba(255,255,255,0.4);
 }
 
-button:hover {
-  opacity: 0.9;
+/* VISTA RESPUESTA */
+#vista-respuesta {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
 }
 
-.aporte {
-  margin-top: 3rem;
-  font-size: 0.85rem;
-  opacity: 0.55;
-}
-
-.aporte a {
-  color: #cfc6ff;
-  text-decoration: none;
-}
-
-.aporte .nota {
-  font-size: 0.8rem;
-  opacity: 0.6;
-}
-
-.informativo {
-  margin-top: 4rem;
-  opacity: 0.8;
-}
-
-.homenaje {
-  font-size: 0.85rem;
-}
-
-.homenaje .firma {
-  font-style: italic;
-  opacity: 0.6;
-}
-
-#respuesta {
-  font-size: 1.5rem;
+/* TEXTO SIMPLE */
+#respuesta-texto {
+  font-size: 1.4rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   opacity: 0;
-  animation: aparecer 3s ease forwards;
-  margin-top: 20vh;
+  animation: fadeIn 2s ease forwards;
 }
 
-@keyframes aparecer {
+@keyframes fadeIn {
   to { opacity: 1; }
 }
 
-.acciones-respuesta {
-  margin-top: 3rem;
-}
-
-footer {
-  margin-top: 4rem;
-  font-size: 0.75rem;
-  opacity: 0.4;
-}
-
+/* ARCANO */
 .arcano {
-  text-align: center;
-  padding: 2rem 1rem;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: all 1.2s ease;
 }
 
-.arcano-titulo {
-  font-size: 1.8rem;
-  letter-spacing: 3px;
-  margin-bottom: 1.8rem;
+.arcano.visible {
+  opacity: 1;
+  transform: scale(1);
+  animation: flotar 6s ease-in-out infinite;
 }
 
-
-.arcano-img {
-  max-width: 260px;
-  width: 100%;
-  margin: 0 auto 1.8rem auto;
-  display: block;
-  transition: transform 0.6s ease;
-  border-radius: 8px;
-  filter: contrast(1.05);
+/* RESPIRACIÓN DEL ARCANO */
+@keyframes flotar {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
 }
 
-.interpretacion {
-  max-width: 520px;
-  margin: 0 auto;
-  line-height: 1.6;
-  font-size: 1.05rem;
-}
-
-
-/* ===== HOME · IMAGEN MINIMAL ===== */
-.home-oracle {
-  text-align: center;
-  margin-bottom: 1.2rem;
-}
-
-.home-crystal {
-  width: 150px;
-  opacity: 0.85;
-}
-
-/* ===== RESPUESTA · SELLO MODERNO ===== */
-.oracle-seal {
-  margin-top: 3.2rem; /* antes 4rem */
-  text-align: center;
-  opacity: 0.6;
-}
-
-.seal-crystal {
-  width: 65px;
-  margin-bottom: 2px;
-}
-
-.oracle-sign {
-  font-style: italic;
-  font-size: 0.85rem;
-}
-
-/* ===== RESPUESTA · FIRMA MODERNO ===== */
-.oracle-seal {
-  margin-top: 4rem;
-  text-align: center;
-  opacity: 0.6;
-}
-
-.firma-personal {
-  display: block;
-  margin: 16px auto 0; /* más aire respecto al texto */
-  width: 110px;
-  opacity: 0.38;
-}
-
-.oracle-sign {
-  font-style: italic;
-  font-size: 0.85rem;
-}
-
-/* CONTENEDOR RITUAL */
-.arcano.ritual {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh;
-  animation: aparecerRitual 1.2s ease;
-}
-
-/* BLOQUE CENTRAL */
 .arcano-contenido {
-  text-align: center;
   max-width: 420px;
 }
 
-/* TÍTULO */
 .arcano-titulo {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   letter-spacing: 3px;
   margin-bottom: 2rem;
 }
 
-/* IMAGEN WRAP */
-.arcano-img-wrap {
-  margin-bottom: 2rem;
-}
-
-/* IMAGEN */
 .arcano-img {
-  width: 100%;
   max-width: 260px;
+  margin: 0 auto 2rem;
   display: block;
-  margin: 0 auto;
-  transition: transform 0.8s ease;
-  filter: contrast(1.05);
 }
 
-/* SEPARADOR (clave ritual) */
 .arcano-separador {
   width: 60px;
   height: 1px;
@@ -251,39 +132,23 @@ footer {
   margin: 2rem auto;
 }
 
-/* TEXTO */
 .interpretacion {
-  font-size: 1.05rem;
   line-height: 1.7;
   opacity: 0.9;
 }
 
-/* ANIMACIÓN SUAVE */
-@keyframes aparecerRitual {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-#vista-respuesta {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* antes seguramente estaba centrado */
-  align-items: center;
-  padding-top: 80px; /* controla el espacio superior */
-}
-
-.arcano {
+/* FIRMA */
+.oracle-seal {
   text-align: center;
-  max-width: 420px;
+  opacity: 0.6;
 }
 
-.arcano img {
-  display: block;
-  margin: 20px auto;
+.seal-crystal {
+  width: 60px;
+}
+
+.firma-personal {
+  width: 110px;
+  margin-top: 10px;
+  opacity: 0.4;
 }
