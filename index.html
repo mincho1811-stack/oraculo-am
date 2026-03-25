@@ -14,7 +14,6 @@
   <!-- VISTA CONSULTA -->
   <section id="vista-consulta">
         
-    <!-- IMAGEN HOME -->
     <div class="home-oracle">
       <img src="bola-cristal.png" class="home-crystal" alt="Oráculo AM">
     </div>
@@ -28,7 +27,7 @@
       Consulta.
     </p>
 
-    <p class="fade-in">
+    <p>
       No busques la respuesta que deseas.<br>
       Permite que llegue la respuesta.
     </p>
@@ -40,85 +39,28 @@
     </p>
 
     <div class="pregunta">
-      <input
-        type="text"
-        id="pregunta"
-        placeholder="Puedes escribir tu pregunta aquí (opcional)"
-        autocomplete="off"
-      >
+      <input type="text" id="pregunta" placeholder="Puedes escribir tu pregunta (opcional)">
     </div>
 
     <button id="consultar">Consultar</button>
 
-    <!-- APORTES -->
-    <section class="aporte">
-      <p>
-        Si este Oráculo te acompañó,<br>
-        puedes sostener su existencia.
-      </p>
-      <p class="nota">
-        El aporte es voluntario, consciente y agradecido.
-      </p>
-      <a href="https://ko-fi.com/oraculoam" target="_blank">
-        Aportar en Ko-fi
-      </a>
-    </section>
-
-    <!-- ACERCA -->
-    <section class="informativo">
-      <h3>Acerca del Oráculo AM</h3>
-      <p>
-        El Oráculo AM es una herramienta simbólica de introspección.
-        No predice, no impone y no decide por ti.
-      </p>
-      <p>
-        Las respuestas no son sentencias.
-        Son espejos.
-      </p>
-    </section>
-
-    <!-- HOMENAJE -->
-    <section class="informativo homenaje">
-      <p>
-        Este Oráculo honra el espíritu creativo y visionario de
-        <strong>Enrique Barrios</strong>,
-        autor de <em>Ami de las estrellas</em> y creador de
-        <em>El Oráculo del Siglo XXI</em>.
-      </p>
-      <p>
-        No busca replicar su obra, sino honrar su intención:
-        invitar al silencio interior y a la escucha profunda.
-      </p>
-      <p class="firma">
-        Gracias por encender una luz que sigue iluminando.
-      </p>
-    </section>
-
   </section>
 
   <!-- VISTA RESPUESTA -->
- <section id="vista-respuesta" hidden>
+  <section id="vista-respuesta" hidden>
 
-  <div id="respuesta"></div>
+    <div id="respuesta-texto"></div>
+    <div id="respuesta-arcano"></div>
 
-  <div id="ampliacion-ia" style="margin-top:2.5rem; font-size:0.95rem; opacity:0.75;"></div>
+    <div class="oracle-seal">
+      <img src="bola-cristal.png" class="seal-crystal">
+      <div class="oracle-sign">— Oráculo AM</div>
+      <img src="firma-am.png" class="firma-personal">
+    </div>
 
-  <!-- SELLO ORÁCULO -->
-  <div class="oracle-seal">
-    <img src="bola-cristal.png" class="seal-crystal" alt="">
-    <div class="oracle-sign">— Oráculo AM</div>
-    
-    <!-- FIRMA PERSONAL -->
-  <img src="firma-am.png" class="firma-personal" alt="Firma">
-  </div>
+    <button id="volver" class="secundario">Volver</button>
 
-  <button id="volver" class="secundario">Volver</button>
-</section>
-
-
-  <footer>
-    © Oráculo AM — Anima Mundi
-  </footer>
+  </section>
 
 </main>
 
