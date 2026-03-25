@@ -1,39 +1,11 @@
-// --------- MODO PRO (pruebas) ---------
-const PRO_ACTIVO = true;
-const MAX_CONSULTAS_PRO = 7;
-const PROBABILIDAD_ARCANO = 0.3; // 30%
-const PROB_DERECHO = 0.55;
-
-// --------- ELEMENTOS DOM ---------
 const btnConsultar = document.getElementById("consultar");
 const btnVolver = document.getElementById("volver");
 
 const vistaConsulta = document.getElementById("vista-consulta");
 const vistaRespuesta = document.getElementById("vista-respuesta");
 
-const respuestaEl = document.getElementById("respuesta");
-const inputPregunta = document.getElementById("pregunta");
-
-// --------- BANCO BASE (FREE) ---------
-const banco = {
-  palabras: [
-    "SILENCIO", "UMBRAL", "PAUSA", "OBSERVA", "RECUERDA",
-    "ESPERA", "CAMBIO", "CLARIDAD", "ORIGEN", "ENTREGA"
-  ],
-  frases_cortas: [
-    "TODO COMIENZA DENTRO.",
-    "NO ES EL MOMENTO.",
-    "CONFÍA EN EL PROCESO.",
-    "LO SIMPLE ES PROFUNDO.",
-    "NO FUERCES LA RESPUESTA."
-  ],
-  frases_largas: [
-    "LO QUE BUSCAS NO SE REVELA CUANDO INSISTES, SINO CUANDO PERMITES.",
-    "A VECES LA RESPUESTA ES CAMINAR SIN SABER HACIA DÓNDE.",
-    "CUANDO CESAS LA BÚSQUEDA, LA RESPUESTA APARECE.",
-    "EL SILENCIO NO ES AUSENCIA, ES PRESENCIA PLENA."
-  ]
-};
+const respuestaTexto = document.getElementById("respuesta-texto");
+const respuestaArcano = document.getElementById("respuesta-arcano");
 
 let arcanosMayores = [];
 
@@ -41,46 +13,23 @@ fetch("data/arcanos_mayores.json")
   .then(res => res.json())
   .then(data => arcanosMayores = data);
 
-
-// --------- UTILIDADES ---------
-function hoyString() {
-  return new Date().toDateString();
-}
-
 function elegir(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// --------- ARCANO MAYOR ---------
-function saleArcanoMayor() {
-  return PRO_ACTIVO && Math.random() < PROBABILIDAD_ARCANO;
-}
-
 function generarArcanoMayor() {
-  if (!arcanosMayores.length) {
-    return "<p>Cargando el oráculo...</p>";
-  }
-
   const carta = elegir(arcanosMayores);
-  const esDerecho = Math.random() < PROB_DERECHO;
-
-  let titulo = `${carta.romano}. ${carta.nombre}`;
-  if (!esDerecho) titulo += " (invertido)";
-
-  const interpretacion = esDerecho
-    ? carta.derecho
-    : carta.invertido;
+  const esDerecho = Math.random() < 0.55;
 
   const rotacion = esDerecho ? "rotate(0deg)" : "rotate(180deg)";
+  const interpretacion = esDerecho ? carta.derecho : carta.invertido;
 
   return `
-    <div class="arcano ritual">
+    <div class="arcano">
       <div class="arcano-contenido">
-        <h2 class="arcano-titulo">${titulo}</h2>
+        <h2 class="arcano-titulo">${carta.nombre}</h2>
 
-        <div class="arcano-img-wrap">
-          <img src="/${carta.imagen}" class="arcano-img" style="transform:${rotacion};">
-        </div>
+        <img src="${carta.imagen}" class="arcano-img" style="transform:${rotacion};">
 
         <div class="arcano-separador"></div>
 
@@ -90,85 +39,49 @@ function generarArcanoMayor() {
   `;
 }
 
-
-// --------- RESPUESTA GENERAL ---------
-function generarRespuesta() {
-
-  // PRO: posible Arcano Mayor (exclusivo)
-  if (saleArcanoMayor()) {
-    return {
-      tipo: "arcano_mayor",
-      html: generarArcanoMayor()
-    };
-  }
-
-  // Respuesta simbólica normal
-  const totales = [1, 3, 5];
-  const total = elegir(totales);
-
-  let respuesta = [];
-
-  const fuentes = [
-    banco.palabras,
-    banco.frases_cortas,
-    banco.frases_largas
+function generarTexto() {
+  const opciones = [
+    "SILENCIO",
+    "CONFÍA EN EL PROCESO",
+    "NO ES EL MOMENTO",
+    "TODO COMIENZA DENTRO"
   ];
-
-  while (respuesta.length < total) {
-    const fuente = elegir(fuentes);
-    respuesta.push(elegir(fuente));
-  }
-
-  return {
-    tipo: "texto",
-    items: respuesta
-  };
+  return elegir(opciones);
 }
 
-// --------- CONSULTAR ---------
 btnConsultar.onclick = () => {
-  const ultima = localStorage.getItem("oraculoAM_ultimaConsulta");
-  const hoy = hoyString();
-
-  const contadorKey = "oraculoAM_contadorHoy";
-  let contadorHoy = parseInt(localStorage.getItem(contadorKey)) || 0;
-
-  if (ultima === hoy) {
-    if (!PRO_ACTIVO || contadorHoy >= MAX_CONSULTAS_PRO) {
-      respuestaEl.innerHTML =
-        "EL ORÁCULO YA HABLÓ HOY.<br><br>REGRESA MAÑANA.";
-      vistaConsulta.hidden = true;
-      vistaRespuesta.hidden = false;
-      return;
-    }
-  } else {
-    contadorHoy = 0;
-  }
-
-  const resultado = generarRespuesta();
-
-  // MOSTRAR RESPUESTA
-  if (resultado.tipo === "arcano_mayor") {
-    respuestaEl.innerHTML = resultado.html;
-  } else if (resultado.tipo === "texto") {
-    respuestaEl.innerHTML = resultado.items.join("<br><br>");
-  }
-
-  localStorage.setItem("oraculoAM_ultimaConsulta", hoy);
-  contadorHoy++;
-  localStorage.setItem("oraculoAM_contadorHoy", contadorHoy);
 
   vistaConsulta.hidden = true;
   vistaRespuesta.hidden = false;
+
+  respuestaTexto.innerHTML = "";
+  respuestaArcano.innerHTML = "";
+
+  // Pausa ritual (oscuridad implícita)
+  setTimeout(() => {
+
+    if (Math.random() < 0.4 && arcanosMayores.length) {
+
+      respuestaArcano.innerHTML = generarArcanoMayor();
+
+      setTimeout(() => {
+        const arcano = document.querySelector(".arcano");
+        if (arcano) arcano.classList.add("visible");
+      }, 200);
+
+    } else {
+      respuestaTexto.innerHTML = generarTexto();
+    }
+
+  }, 400);
 };
 
-// --------- VOLVER ---------
 btnVolver.onclick = () => {
   vistaRespuesta.hidden = true;
   vistaConsulta.hidden = false;
 
-  respuestaEl.innerHTML = "";
-  inputPregunta.value = "";
+  respuestaTexto.innerHTML = "";
+  respuestaArcano.innerHTML = "";
 
   window.scrollTo(0, 0);
 };
