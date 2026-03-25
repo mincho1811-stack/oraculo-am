@@ -205,3 +205,67 @@ footer {
   font-style: italic;
   font-size: 0.85rem;
 }
+
+/* CONTENEDOR RITUAL */
+.arcano.ritual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  animation: aparecerRitual 1.2s ease;
+}
+
+/* BLOQUE CENTRAL */
+.arcano-contenido {
+  text-align: center;
+  max-width: 420px;
+}
+
+/* TÍTULO */
+.arcano-titulo {
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  margin-bottom: 2rem;
+}
+
+/* IMAGEN WRAP */
+.arcano-img-wrap {
+  margin-bottom: 2rem;
+}
+
+/* IMAGEN */
+.arcano-img {
+  width: 100%;
+  max-width: 260px;
+  display: block;
+  margin: 0 auto;
+  transition: transform 0.8s ease;
+  filter: contrast(1.05);
+}
+
+/* SEPARADOR (clave ritual) */
+.arcano-separador {
+  width: 60px;
+  height: 1px;
+  background: rgba(255,255,255,0.5);
+  margin: 2rem auto;
+}
+
+/* TEXTO */
+.interpretacion {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+/* ANIMACIÓN SUAVE */
+@keyframes aparecerRitual {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
