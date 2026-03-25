@@ -1,99 +1,129 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Oráculo AM — Anima Mundi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-</head>
+// --------- MODO PRO ---------
+const PRO_ACTIVO = true;
+const MAX_CONSULTAS_PRO = 7;
+const PROBABILIDAD_ARCANO = 0.3;
+const PROB_DERECHO = 0.55;
 
-<body>
+// --------- DOM ---------
+const btnConsultar = document.getElementById("consultar");
+const btnVolver = document.getElementById("volver");
 
-<main class="oraculo">
+const vistaConsulta = document.getElementById("vista-consulta");
+const vistaRespuesta = document.getElementById("vista-respuesta");
 
-  <!-- VISTA CONSULTA -->
-  <section id="vista-consulta">
-        
-    <div class="home-oracle">
-      <img src="bola-cristal.png" class="home-crystal" alt="Oráculo AM">
+const respuestaEl = document.getElementById("respuesta");
+const inputPregunta = document.getElementById("pregunta");
+
+// --------- BANCO ---------
+const banco = {
+  palabras: ["SILENCIO","UMBRAL","PAUSA","OBSERVA","RECUERDA","ESPERA","CAMBIO","CLARIDAD","ORIGEN","ENTREGA"],
+  frases_cortas: [
+    "TODO COMIENZA DENTRO.",
+    "NO ES EL MOMENTO.",
+    "CONFÍA EN EL PROCESO.",
+    "LO SIMPLE ES PROFUNDO.",
+    "NO FUERCES LA RESPUESTA."
+  ],
+  frases_largas: [
+    "LO QUE BUSCAS NO SE REVELA CUANDO INSISTES, SINO CUANDO PERMITES.",
+    "A VECES LA RESPUESTA ES CAMINAR SIN SABER HACIA DÓNDE.",
+    "CUANDO CESAS LA BÚSQUEDA, LA RESPUESTA APARECE.",
+    "EL SILENCIO NO ES AUSENCIA, ES PRESENCIA PLENA."
+  ]
+};
+
+let arcanosMayores = [];
+
+fetch("data/arcanos_mayores.json")
+  .then(res => res.json())
+  .then(data => arcanosMayores = data);
+
+// --------- UTILIDADES ---------
+function hoyString() {
+  return new Date().toDateString();
+}
+
+function elegir(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// --------- ARCANO ---------
+function saleArcanoMayor() {
+  return PRO_ACTIVO && Math.random() < PROBABILIDAD_ARCANO;
+}
+
+function generarArcanoMayor() {
+  const carta = elegir(arcanosMayores);
+  const esDerecho = Math.random() < PROB_DERECHO;
+
+  let titulo = `${carta.romano}. ${carta.nombre}`;
+  if (!esDerecho) titulo += " (invertido)";
+
+  const interpretacion = esDerecho ? carta.derecho : carta.invertido;
+  const rotacion = esDerecho ? "rotate(0deg)" : "rotate(180deg)";
+
+  return `
+    <div class="arcano">
+      <h2 class="arcano-titulo">${titulo}</h2>
+      <img src="/${carta.imagen}" class="arcano-img" style="transform:${rotacion};">
+      <p class="interpretacion">${interpretacion}</p>
     </div>
+  `;
+}
 
-    <h1>Oráculo AM</h1>
-    <h2 class="subtitulo">Anima Mundi</h2>
+// --------- RESPUESTA ---------
+function generarRespuesta() {
 
-    <p class="ritual">
-      Respira.<br>
-      Conecta.<br>
-      Consulta.
-    </p>
+  if (saleArcanoMayor()) {
+    return { tipo: "arcano", html: generarArcanoMayor() };
+  }
 
-    <p>
-      No busques la respuesta que deseas.<br>
-      Permite que llegue la respuesta.
-    </p>
+  const totales = [1,3,5];
+  const total = elegir(totales);
 
-    <p class="preparacion">
-      Formula una sola pregunta.<br>
-      Puedes escribirla o mantenerla clara en tu mente.<br>
-      <em>La pregunta no se guarda ni se envía.</em>
-    </p>
+  let respuesta = [];
+  const fuentes = [banco.palabras, banco.frases_cortas, banco.frases_largas];
 
-    <div class="pregunta">
-      <input type="text" id="pregunta" placeholder="Puedes escribir tu pregunta aquí (opcional)">
-    </div>
+  while (respuesta.length < total) {
+    respuesta.push(elegir(elegir(fuentes)));
+  }
 
-    <button id="consultar">Consultar</button>
+  return { tipo: "texto", items: respuesta };
+}
 
-    <!-- APORTES -->
-    <section class="aporte">
-      <p>Si este Oráculo te acompañó,<br>puedes sostener su existencia.</p>
-      <p class="nota">El aporte es voluntario, consciente y agradecido.</p>
-      <a href="https://ko-fi.com/oraculoam" target="_blank">Aportar en Ko-fi</a>
-    </section>
+// --------- CONSULTAR ---------
+btnConsultar.onclick = () => {
 
-    <!-- INFO -->
-    <section class="informativo">
-      <h3>Acerca del Oráculo AM</h3>
-      <p>El Oráculo AM es una herramienta simbólica de introspección.</p>
-      <p>Las respuestas no son sentencias. Son espejos.</p>
-    </section>
+  const ultima = localStorage.getItem("oraculoAM_ultimaConsulta");
+  const hoy = hoyString();
 
-    <!-- HOMENAJE -->
-    <section class="informativo homenaje">
-      <p>
-        Este Oráculo honra el espíritu creativo y visionario de
-        <strong>Enrique Barrios</strong>.
-      </p>
-      <p class="firma">
-        Gracias por encender una luz que sigue iluminando.
-      </p>
-    </section>
+  let contador = parseInt(localStorage.getItem("oraculoAM_contadorHoy")) || 0;
 
-  </section>
+  if (ultima === hoy && (!PRO_ACTIVO || contador >= MAX_CONSULTAS_PRO)) {
+    respuestaEl.innerHTML = "EL ORÁCULO YA HABLÓ HOY.<br><br>REGRESA MAÑANA.";
+  } else {
+    const r = generarRespuesta();
 
-  <!-- VISTA RESPUESTA -->
-  <section id="vista-respuesta" hidden>
+    if (r.tipo === "arcano") {
+      respuestaEl.innerHTML = r.html;
+    } else {
+      respuestaEl.innerHTML = r.items.join("<br><br>");
+    }
 
-    <div id="respuesta"></div>
+    localStorage.setItem("oraculoAM_ultimaConsulta", hoy);
+    contador++;
+    localStorage.setItem("oraculoAM_contadorHoy", contador);
+  }
 
-    <div id="ampliacion-ia"></div>
+  vistaConsulta.hidden = true;
+  vistaRespuesta.hidden = false;
+};
 
-    <div class="oracle-seal">
-      <img src="bola-cristal.png" class="seal-crystal" alt="">
-      <div class="oracle-sign">— Oráculo AM</div>
-      <img src="firma-am.png" class="firma-personal" alt="">
-    </div>
-
-    <button id="volver" class="secundario">Volver</button>
-
-  </section>
-
-  <footer>
-    © Oráculo AM — Anima Mundi
-  </footer>
-
-</main>
-
-<script src="script.js"></script>
-</body>
-</html>
+// --------- VOLVER ---------
+btnVolver.onclick = () => {
+  vistaRespuesta.hidden = true;
+  vistaConsulta.hidden = false;
+  respuestaEl.innerHTML = "";
+  inputPregunta.value = "";
+  window.scrollTo(0,0);
+};
