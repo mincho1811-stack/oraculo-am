@@ -1,198 +1,99 @@
-// --------- MODO PRO (pruebas) ---------
-const PRO_ACTIVO = true;
-const MAX_CONSULTAS_PRO = 7;
-const PROBABILIDAD_ARCANO = 0.3; // 30%
-const PROB_DERECHO = 0.55;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Oráculo AM — Anima Mundi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+</head>
 
-// --------- ELEMENTOS DOM ---------
-const btnConsultar = document.getElementById("consultar");
-const btnVolver = document.getElementById("volver");
+<body>
 
-const vistaConsulta = document.getElementById("vista-consulta");
-const vistaRespuesta = document.getElementById("vista-respuesta");
+<main class="oraculo">
 
-const respuestaEl = document.getElementById("respuesta");
-const inputPregunta = document.getElementById("pregunta");
-
-// --------- BANCO BASE (FREE) ---------
-const banco = {
-  palabras: [
-    "SILENCIO", "UMBRAL", "PAUSA", "OBSERVA", "RECUERDA",
-    "ESPERA", "CAMBIO", "CLARIDAD", "ORIGEN", "ENTREGA"
-  ],
-  frases_cortas: [
-    "TODO COMIENZA DENTRO.",
-    "NO ES EL MOMENTO.",
-    "CONFÍA EN EL PROCESO.",
-    "LO SIMPLE ES PROFUNDO.",
-    "NO FUERCES LA RESPUESTA."
-  ],
-  frases_largas: [
-    "LO QUE BUSCAS NO SE REVELA CUANDO INSISTES, SINO CUANDO PERMITES.",
-    "A VECES LA RESPUESTA ES CAMINAR SIN SABER HACIA DÓNDE.",
-    "CUANDO CESAS LA BÚSQUEDA, LA RESPUESTA APARECE.",
-    "EL SILENCIO NO ES AUSENCIA, ES PRESENCIA PLENA."
-  ]
-};
-
-let arcanosMayores = [];
-
-// --------- CARGA DE ARCANOS ---------
-fetch("data/arcanos_mayores.json")
-  .then(res => res.json())
-  .then(data => arcanosMayores = data);
-
-// --------- UTILIDADES ---------
-function hoyString() {
-  return new Date().toDateString();
-}
-
-function elegir(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-// --------- ARCANO MAYOR ---------
-function saleArcanoMayor() {
-  return PRO_ACTIVO && Math.random() < PROBABILIDAD_ARCANO;
-}
-
-function generarArcanoMayor() {
-  if (!arcanosMayores.length) {
-    return "<p>Cargando el oráculo...</p>";
-  }
-
-  const carta = elegir(arcanosMayores);
-  const esDerecho = Math.random() < PROB_DERECHO;
-
-  let titulo = `${carta.romano}. ${carta.nombre}`;
-  if (!esDerecho) titulo += " (invertido)";
-
-  const interpretacion = esDerecho
-    ? carta.derecho
-    : carta.invertido;
-
-  const rotacion = esDerecho ? "rotate(0deg)" : "rotate(180deg)";
-
-  return `
-    <div class="arcano ritual">
-      <div class="arcano-contenido">
-        <h2 class="arcano-titulo">${titulo}</h2>
-
-        <div class="arcano-img-wrap">
-          <img src="/${carta.imagen}" class="arcano-img" style="transform:${rotacion};">
-        </div>
-
-        <div class="arcano-separador"></div>
-
-        <p class="interpretacion">${interpretacion}</p>
-      </div>
+  <!-- VISTA CONSULTA -->
+  <section id="vista-consulta">
+        
+    <div class="home-oracle">
+      <img src="bola-cristal.png" class="home-crystal" alt="Oráculo AM">
     </div>
-  `;
-}
 
-// --------- RESPUESTA GENERAL ---------
-function generarRespuesta() {
+    <h1>Oráculo AM</h1>
+    <h2 class="subtitulo">Anima Mundi</h2>
 
-  // PRO: posible Arcano Mayor (exclusivo)
-  if (saleArcanoMayor()) {
-    return {
-      tipo: "arcano_mayor",
-      html: generarArcanoMayor()
-    };
-  }
+    <p class="ritual">
+      Respira.<br>
+      Conecta.<br>
+      Consulta.
+    </p>
 
-  // Respuesta simbólica normal
-  const totales = [1, 3, 5];
-  const total = elegir(totales);
+    <p>
+      No busques la respuesta que deseas.<br>
+      Permite que llegue la respuesta.
+    </p>
 
-  let respuesta = [];
+    <p class="preparacion">
+      Formula una sola pregunta.<br>
+      Puedes escribirla o mantenerla clara en tu mente.<br>
+      <em>La pregunta no se guarda ni se envía.</em>
+    </p>
 
-  const fuentes = [
-    banco.palabras,
-    banco.frases_cortas,
-    banco.frases_largas
-  ];
+    <div class="pregunta">
+      <input type="text" id="pregunta" placeholder="Puedes escribir tu pregunta aquí (opcional)">
+    </div>
 
-  while (respuesta.length < total) {
-    const fuente = elegir(fuentes);
-    respuesta.push(elegir(fuente));
-  }
+    <button id="consultar">Consultar</button>
 
-  return {
-    tipo: "texto",
-    items: respuesta
-  };
-}
+    <!-- APORTES -->
+    <section class="aporte">
+      <p>Si este Oráculo te acompañó,<br>puedes sostener su existencia.</p>
+      <p class="nota">El aporte es voluntario, consciente y agradecido.</p>
+      <a href="https://ko-fi.com/oraculoam" target="_blank">Aportar en Ko-fi</a>
+    </section>
 
-// --------- CONSULTAR ---------
-btnConsultar.onclick = () => {
-  const ultima = localStorage.getItem("oraculoAM_ultimaConsulta");
-  const hoy = hoyString();
+    <!-- INFO -->
+    <section class="informativo">
+      <h3>Acerca del Oráculo AM</h3>
+      <p>El Oráculo AM es una herramienta simbólica de introspección.</p>
+      <p>Las respuestas no son sentencias. Son espejos.</p>
+    </section>
 
-  const contadorKey = "oraculoAM_contadorHoy";
-  let contadorHoy = parseInt(localStorage.getItem(contadorKey)) || 0;
+    <!-- HOMENAJE -->
+    <section class="informativo homenaje">
+      <p>
+        Este Oráculo honra el espíritu creativo y visionario de
+        <strong>Enrique Barrios</strong>.
+      </p>
+      <p class="firma">
+        Gracias por encender una luz que sigue iluminando.
+      </p>
+    </section>
 
-  if (ultima === hoy) {
-    if (!PRO_ACTIVO || contadorHoy >= MAX_CONSULTAS_PRO) {
-      respuestaEl.innerHTML =
-        "EL ORÁCULO YA HABLÓ HOY.<br><br>REGRESA MAÑANA.";
+  </section>
 
-      vistaConsulta.hidden = true;
-      vistaRespuesta.hidden = false;
-      return;
-    }
-  } else {
-    contadorHoy = 0;
-  }
+  <!-- VISTA RESPUESTA -->
+  <section id="vista-respuesta" hidden>
 
-  const resultado = generarRespuesta();
+    <div id="respuesta"></div>
 
-  // CAMBIO DE VISTA
-  vistaConsulta.hidden = true;
-  vistaRespuesta.hidden = false;
+    <div id="ampliacion-ia"></div>
 
-  // LIMPIAR
-  respuestaEl.innerHTML = "";
-  respuestaEl.style.opacity = "0";
+    <div class="oracle-seal">
+      <img src="bola-cristal.png" class="seal-crystal" alt="">
+      <div class="oracle-sign">— Oráculo AM</div>
+      <img src="firma-am.png" class="firma-personal" alt="">
+    </div>
 
-  // PAUSA RITUAL
-  setTimeout(() => {
+    <button id="volver" class="secundario">Volver</button>
 
-    // MOSTRAR RESPUESTA
-    if (resultado.tipo === "arcano_mayor") {
+  </section>
 
-      respuestaEl.innerHTML = resultado.html;
+  <footer>
+    © Oráculo AM — Anima Mundi
+  </footer>
 
-      // ACTIVAR APARICIÓN DEL ARCANO
-      setTimeout(() => {
-        const arcano = document.querySelector(".arcano");
-        if (arcano) arcano.classList.add("visible");
-      }, 200);
+</main>
 
-    } else if (resultado.tipo === "texto") {
-
-      respuestaEl.innerHTML = resultado.items.join("<br><br>");
-
-    }
-
-    // FADE GENERAL
-    respuestaEl.style.opacity = "1";
-
-  }, 400);
-
-  // GUARDADO
-  localStorage.setItem("oraculoAM_ultimaConsulta", hoy);
-  contadorHoy++;
-  localStorage.setItem("oraculoAM_contadorHoy", contadorHoy);
-};
-
-// --------- VOLVER ---------
-btnVolver.onclick = () => {
-  vistaRespuesta.hidden = true;
-  vistaConsulta.hidden = false;
-
-  respuestaEl.innerHTML = "";
-  inputPregunta.value = "";
-
-  window.scrollTo(0, 0);
-};
+<script src="script.js"></script>
+</body>
+</html>
