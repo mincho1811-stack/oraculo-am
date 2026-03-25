@@ -269,3 +269,21 @@ footer {
     transform: translateY(0);
   }
 }
+
+#vista-respuesta {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* antes seguramente estaba centrado */
+  align-items: center;
+  padding-top: 80px; /* controla el espacio superior */
+}
+
+.arcano {
+  text-align: center;
+  max-width: 420px;
+}
+
+.arcano img {
+  display: block;
+  margin: 20px auto;
+}
