@@ -1,4 +1,4 @@
-// --------- MODO PRO ---------
+// --------- CONFIG ---------
 const PRO_ACTIVO = true;
 const MAX_CONSULTAS_PRO = 7;
 const PROBABILIDAD_ARCANO = 0.3;
@@ -13,6 +13,21 @@ const vistaRespuesta = document.getElementById("vista-respuesta");
 
 const respuestaEl = document.getElementById("respuesta");
 const inputPregunta = document.getElementById("pregunta");
+
+// --------- ESTADO ---------
+let arcanosMayores = [];
+let arcanosListos = false;
+
+// --------- CARGA SEGURA ---------
+fetch("data/arcanos_mayores.json")
+  .then(res => res.json())
+  .then(data => {
+    arcanosMayores = data;
+    arcanosListos = true;
+  })
+  .catch(() => {
+    arcanosListos = false;
+  });
 
 // --------- BANCO ---------
 const banco = {
@@ -32,13 +47,7 @@ const banco = {
   ]
 };
 
-let arcanosMayores = [];
-
-fetch("data/arcanos_mayores.json")
-  .then(res => res.json())
-  .then(data => arcanosMayores = data);
-
-// --------- UTILIDADES ---------
+// --------- UTIL ---------
 function hoyString() {
   return new Date().toDateString();
 }
@@ -47,12 +56,17 @@ function elegir(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// --------- ARCANO ---------
-function saleArcanoMayor() {
-  return PRO_ACTIVO && Math.random() < PROBABILIDAD_ARCANO;
-}
-
+// --------- ARCANO SEGURO ---------
 function generarArcanoMayor() {
+
+  if (!arcanosListos || arcanosMayores.length === 0) {
+    return `
+      <div class="arcano">
+        <p class="interpretacion">EL ORÁCULO AÚN SE ESTÁ REVELANDO...</p>
+      </div>
+    `;
+  }
+
   const carta = elegir(arcanosMayores);
   const esDerecho = Math.random() < PROB_DERECHO;
 
@@ -74,7 +88,7 @@ function generarArcanoMayor() {
 // --------- RESPUESTA ---------
 function generarRespuesta() {
 
-  if (saleArcanoMayor()) {
+  if (PRO_ACTIVO && Math.random() < PROBABILIDAD_ARCANO) {
     return { tipo: "arcano", html: generarArcanoMayor() };
   }
 
@@ -102,6 +116,7 @@ btnConsultar.onclick = () => {
   if (ultima === hoy && (!PRO_ACTIVO || contador >= MAX_CONSULTAS_PRO)) {
     respuestaEl.innerHTML = "EL ORÁCULO YA HABLÓ HOY.<br><br>REGRESA MAÑANA.";
   } else {
+
     const r = generarRespuesta();
 
     if (r.tipo === "arcano") {
