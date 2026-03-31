@@ -18,28 +18,7 @@ const inputPregunta = document.getElementById("pregunta");
 let arcanosMayores = [];
 let arcanosListos = false;
 
-fetch("data/arcanos_mayores.json")
-  .then(res => {
-    console.log("STATUS:", res.status);
-    return res.json();
-  })
-  .then(data => {
-    console.log("DATA:", data);
-  })
-  .catch(err => {
-    console.error("ERROR:", err);
-  });
 
-// --------- CARGA SEGURA ---------
-fetch("data/arcanos_mayores.json")
-  .then(res => res.json())
-  .then(data => {
-    arcanosMayores = data;
-    arcanosListos = true;
-  })
-  .catch(() => {
-    arcanosListos = false;
-  });
 
 // --------- BANCO ---------
 const banco = {
