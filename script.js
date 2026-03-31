@@ -16,7 +16,6 @@ const inputPregunta = document.getElementById("pregunta");
 
 // --------- ESTADO ---------
 let arcanosMayores = [];
-let arcanosListos = false;
 
 let arcanosMayores = [
   {
@@ -243,14 +242,6 @@ function elegir(arr) {
 
 // --------- ARCANO SEGURO ---------
 function generarArcanoMayor() {
-
-  if (!arcanosListos || arcanosMayores.length === 0) {
-    return `
-      <div class="arcano">
-        <p class="interpretacion">EL ORÁCULO AÚN SE ESTÁ REVELANDO...</p>
-      </div>
-    `;
-  }
 
   const carta = elegir(arcanosMayores);
   const esDerecho = Math.random() < PROB_DERECHO;
