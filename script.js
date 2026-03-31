@@ -1,7 +1,7 @@
 // --------- CONFIG ---------
 const PRO_ACTIVO = true;
 const MAX_CONSULTAS_PRO = 7;
-const PROBABILIDAD_ARCANO = 0.3;
+const PROBABILIDAD_ARCANO = 1;
 const PROB_DERECHO = 0.55;
 
 // --------- DOM ---------
