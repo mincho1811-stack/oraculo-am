@@ -243,6 +243,13 @@ function elegir(arr) {
 // --------- ARCANO SEGURO ---------
 function generarArcanoMayor() {
 
+  if (!arcanosMayores || arcanosMayores.length === 0) {
+    return {
+      tipo: "texto",
+      items: ["EL ORÁCULO GUARDA SILENCIO."]
+    };
+  }
+
   const carta = elegir(arcanosMayores);
   const esDerecho = Math.random() < PROB_DERECHO;
 
@@ -252,23 +259,25 @@ function generarArcanoMayor() {
   const interpretacion = esDerecho ? carta.derecho : carta.invertido;
   const rotacion = esDerecho ? "rotate(0deg)" : "rotate(180deg)";
 
-  return `
-    <div class="arcano">
-      <h2 class="arcano-titulo">${titulo}</h2>
-      <img src="/${carta.imagen}" class="arcano-img" style="transform:${rotacion};">
-      <p class="interpretacion">${interpretacion}</p>
-    </div>
-  `;
+  return {
+    tipo: "arcano",
+    html: `
+      <div class="arcano">
+        <h2 class="arcano-titulo">${titulo}</h2>
+        <img src="${carta.imagen}" class="arcano-img" style="transform:${rotacion};">
+        <p class="interpretacion">${interpretacion}</p>
+      </div>
+    `
+  };
 }
-
 // --------- RESPUESTA ---------
 function generarRespuesta() {
 
   if (PRO_ACTIVO && Math.random() < PROBABILIDAD_ARCANO) {
-    return { tipo: "arcano", html: generarArcanoMayor() };
+    return generarArcanoMayor();
   }
 
-  const totales = [1,3,5];
+  const totales = [1, 3, 5];
   const total = elegir(totales);
 
   let respuesta = [];
@@ -278,32 +287,21 @@ function generarRespuesta() {
     respuesta.push(elegir(elegir(fuentes)));
   }
 
-  return { tipo: "texto", items: respuesta };
+  return {
+    tipo: "texto",
+    items: respuesta
+  };
 }
 
 // --------- CONSULTAR ---------
 btnConsultar.onclick = () => {
 
-  const ultima = localStorage.getItem("oraculoAM_ultimaConsulta");
-  const hoy = hoyString();
+  const r = generarRespuesta();
 
-  let contador = parseInt(localStorage.getItem("oraculoAM_contadorHoy")) || 0;
-
-  if (ultima === hoy && (!PRO_ACTIVO || contador >= MAX_CONSULTAS_PRO)) {
-    respuestaEl.innerHTML = "EL ORÁCULO YA HABLÓ HOY.<br><br>REGRESA MAÑANA.";
+  if (r.tipo === "arcano") {
+    respuestaEl.innerHTML = r.html;
   } else {
-
-    const r = generarRespuesta();
-
-    if (r.tipo === "arcano") {
-      respuestaEl.innerHTML = r.html;
-    } else {
-      respuestaEl.innerHTML = r.items.join("<br><br>");
-    }
-
-    localStorage.setItem("oraculoAM_ultimaConsulta", hoy);
-    contador++;
-    localStorage.setItem("oraculoAM_contadorHoy", contador);
+    respuestaEl.innerHTML = r.items.join("<br><br>");
   }
 
   vistaConsulta.hidden = true;
