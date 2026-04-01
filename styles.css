@@ -82,6 +82,20 @@ button.secundario {
   opacity: 0.8;
 }
 
+.cargando {
+  text-align: center;
+  font-size: 1.2rem;
+  opacity: 0.7;
+  letter-spacing: 2px;
+  animation: pulso 1.5s infinite;
+}
+
+@keyframes pulso {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
 /* RESPUESTA */
 #vista-respuesta {
   min-height: 100vh;
