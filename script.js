@@ -154,7 +154,11 @@ btnConsultar.onclick = () => {
     html = generarOraculo();
   }
 
+  respuestaEl.innerHTML = `<div class="cargando">CONECTANDO CON LO SUPERIOR...</div>`;
+
+  setTimeout(() => {
   respuestaEl.innerHTML = html;
+  }, 1800);
 
   vistaConsulta.style.display = "none";
   pantallaResultado.style.display = "block";
