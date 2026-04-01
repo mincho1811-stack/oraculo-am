@@ -10,6 +10,10 @@ const pantallaResultado = document.getElementById("pantalla-resultado");
 
 const respuestaEl = document.getElementById("respuesta");
 
+// --------- LIMITE ---------
+const LIMITE_GRATIS = 1;
+const LIMITE_PRO = 7;
+
 // --------- DATA ---------
 const arcanosMayores = [
   { "romano": "0", "nombre": "El Loco", "imagen": "img/arcanos/00_el_loco.jpg", "derecho": "Inicio, apertura, confianza en el viaje del alma. Un inicio sin garantías, pero lleno de posibilidad.", "invertido": "Impulsividad sin dirección, dispersión, miedo a avanzar. Riesgo de no ver lo evidente." },
@@ -102,6 +106,19 @@ function cantidadElementos() {
   return elegir(opciones);
 }
 
+// --------- clave PRO ---------
+function activarPro(clave) {
+  if (clave === "AM-PRO-2026") {
+    localStorage.setItem("usuario_pro", "true");
+    alert("PRO ACTIVADO");
+  }
+}
+
+// --------- ES PRO ---------
+function esPro() {
+  return localStorage.getItem("usuario_pro") === "true";
+}
+
 // --------- ORÁCULO SIMPLE ---------
 function generarOraculo() {
   const cantidad = cantidadElementos();
@@ -121,6 +138,7 @@ function generarOraculo() {
 
   return `<div class="oraculo">${resultado.join("")}</div>`;
 }
+
 
 // --------- ARCANO ---------
 function generarArcano() {
@@ -148,6 +166,19 @@ btnConsultar.onclick = () => {
 
   let html;
 
+    const uso = obtenerUsoHoy();
+    const limite = esPro() ? LIMITE_PRO : LIMITE_GRATIS;
+
+    if (uso.consultas >= limite) {
+    respuestaEl.innerHTML = `
+    <div class="limite">
+      HAS ALCANZADO EL LÍMITE DE CONSULTAS DE HOY.<br><br>
+      ${esPro() ? "" : "ACTIVA EL ORÁCULO PRO PARA ACCEDER A MÁS RESPUESTAS."}
+    </div>
+    `;
+    return;
+    }
+  
   if (Math.random() < PROBABILIDAD_ARCANO) {
     html = generarArcano();
   } else {
@@ -163,8 +194,57 @@ btnConsultar.onclick = () => {
   vistaConsulta.style.display = "none";
   pantallaResultado.style.display = "block";
 
+    guardarUso(uso.consultas + 1);
+  
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
+
+// --------- Simular IA ---------
+function ampliacionIA(texto) {
+  return "Profundización: " + texto;
+}
+
+// --------- AMPLIACIÓN IA ---------
+if (esPro()) {
+  const ampliacion = generarAmpliacion();
+  document.getElementById("ampliacion-ia").innerHTML = ampliacion;
+} else {
+  document.getElementById("ampliacion-ia").innerHTML = `
+    <div class="bloque-pro">
+      ACCEDE A LA AMPLIACIÓN DEL MENSAJE CON ORÁCULO PRO
+    </div>
+  `;
+}
+
+// --------- GENERAR AMPLIACIÓN IA ---------
+function generarAmpliacion() {
+  return `
+    <div class="ampliacion">
+      <h3>Ampliación</h3>
+      <p>La respuesta no es literal. Observa cómo se manifiesta en tu situación actual. Hay matices que solo se revelan con el tiempo.</p>
+    </div>
+  `;
+}
+
+// --------- CONSULTAS POR DIA ---------
+function obtenerUsoHoy() {
+  const hoy = new Date().toDateString();
+  const data = JSON.parse(localStorage.getItem("uso_oraculo")) || {};
+
+  if (data.fecha !== hoy) {
+    return { fecha: hoy, consultas: 0 };
+  }
+
+  return data;
+}
+
+function guardarUso(consultas) {
+  const hoy = new Date().toDateString();
+  localStorage.setItem("uso_oraculo", JSON.stringify({
+    fecha: hoy,
+    consultas
+  }));
+}
 
 // --------- VOLVER ---------
 btnVolver.onclick = () => {
