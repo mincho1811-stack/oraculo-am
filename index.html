@@ -13,7 +13,7 @@
 
   <!-- VISTA CONSULTA -->
   <section id="vista-consulta">
-        
+
     <div class="home-oracle">
       <img src="bola-cristal.png" class="home-crystal" alt="Oráculo AM">
     </div>
@@ -39,7 +39,7 @@
     </p>
 
     <div class="pregunta">
-      <input type="text" id="pregunta" placeholder="Puedes escribir tu pregunta aquí (opcional)">
+      <input type="text" id="pregunta" placeholder="Puedes escribir tu pregunta aquí (opcional)" autocomplete="off">
     </div>
 
     <button id="consultar" type="button">Consultar</button>
@@ -48,7 +48,7 @@
     <section class="aporte">
       <p>Si este Oráculo te ayudó,<br>puedes sostener su existencia.</p>
       <p class="nota">El aporte es voluntario, consciente y agradecido.</p>
-      <a href="https://ko-fi.com/oraculoam" target="_blank">Aportar en Ko-fi</a>
+      <a href="https://ko-fi.com/oraculoam" target="_blank" rel="noopener noreferrer">Aportar en Ko-fi</a>
     </section>
 
     <!-- INFO -->
@@ -73,7 +73,7 @@
   </section>
 
   <!-- VISTA RESPUESTA -->
-  <section id="pantalla-resultado" style="display:none;">
+  <section id="pantalla-resultado" hidden>
 
     <div id="respuesta"></div>
 
@@ -85,7 +85,7 @@
       <img src="firma-am.png" class="firma-personal" alt="">
     </div>
 
-    <button id="volver" class="secundario">Volver</button>
+    <button id="volver" class="secundario" type="button">Volver</button>
 
   </section>
 
