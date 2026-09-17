@@ -1,5 +1,5 @@
 // --------- CONFIG ---------
-const PROBABILIDAD_ARCANO = 0.4; // 40% arcano, 60% oráculo
+const PROBABILIDAD_ARCANO = 0.35; // 35% arcano, 65% oráculo
 
 // --------- DOM ---------
 const btnConsultar = document.getElementById("consultar");
@@ -9,6 +9,8 @@ const vistaConsulta = document.getElementById("vista-consulta");
 const pantallaResultado = document.getElementById("pantalla-resultado");
 
 const respuestaEl = document.getElementById("respuesta");
+const preguntaInput = document.getElementById("pregunta");
+const ampliacionEl = document.getElementById("ampliacion-ia");
 
 // --------- LIMITE ---------
 const LIMITE_GRATIS = 1;
@@ -162,41 +164,49 @@ function generarArcano() {
 }
 
 // --------- CONSULTAR ---------
-btnConsultar.onclick = () => {
+btnConsultar.addEventListener("click", () => {
 
-  let html;
+  const uso = obtenerUsoHoy();
+  const limite = esPro() ? LIMITE_PRO : LIMITE_GRATIS;
 
-    const uso = obtenerUsoHoy();
-    const limite = esPro() ? LIMITE_PRO : LIMITE_GRATIS;
-
-    if (uso.consultas >= limite) {
+  // El límite diario se respeta, pero el aviso se muestra en la pantalla
+  // de resultado para que el botón nunca parezca "muerto".
+  if (uso.consultas >= limite) {
     respuestaEl.innerHTML = `
-    <div class="limite">
-      HAS ALCANZADO EL LÍMITE DE CONSULTAS DE HOY.<br><br>
-      ${esPro() ? "" : "ACTIVA EL ORÁCULO PRO PARA ACCEDER A MÁS RESPUESTAS."}
-    </div>
+      <div class="limite">
+        HAS ALCANZADO EL LÍMITE DE CONSULTAS DE HOY.<br><br>
+        ${esPro() ? "" : "ACTIVA EL ORÁCULO PRO PARA ACCEDER A MÁS RESPUESTAS."}
+      </div>
     `;
+
+    vistaConsulta.style.display = "none";
+    pantallaResultado.hidden = false;
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
     return;
-    }
-  
-  if (Math.random() < PROBABILIDAD_ARCANO) {
-    html = generarArcano();
-  } else {
-    html = generarOraculo();
   }
+
+  const html = Math.random() < PROBABILIDAD_ARCANO
+    ? generarArcano()
+    : generarOraculo();
 
   respuestaEl.innerHTML = `<div class="cargando">CONECTANDO CON LO SUPERIOR...</div>`;
 
-  setTimeout(() => {
-  respuestaEl.innerHTML = html;
-  }, 1800);
-
   vistaConsulta.style.display = "none";
-  pantallaResultado.style.display = "block";
+  pantallaResultado.hidden = false;
 
-    guardarUso(uso.consultas + 1);
-  
+  guardarUso(uso.consultas + 1);
+
   window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // Evita que una respuesta pendiente de una consulta anterior
+  // aparezca después de haber vuelto a Inicio.
+  setTimeout(() => {
+    // Solo muestra la respuesta si seguimos en la pantalla de resultado.
+    if (!pantallaResultado.hidden) {
+      respuestaEl.innerHTML = html;
+    }
+  }, 1800);
 };
 
 // --------- Simular IA ---------
@@ -205,15 +215,16 @@ function ampliacionIA(texto) {
 }
 
 // --------- AMPLIACIÓN IA ---------
-if (esPro()) {
-  const ampliacion = generarAmpliacion();
-  document.getElementById("ampliacion-ia").innerHTML = ampliacion;
-} else {
-  document.getElementById("ampliacion-ia").innerHTML = `
-    <div class="bloque-pro">
-      ACCEDE A LA AMPLIACIÓN DEL MENSAJE CON ORÁCULO PRO
-    </div>
-  `;
+function actualizarAmpliacion() {
+  if (esPro()) {
+    ampliacionEl.innerHTML = generarAmpliacion();
+  } else {
+    ampliacionEl.innerHTML = `
+      <div class="bloque-pro">
+        ACCEDE A LA AMPLIACIÓN DEL MENSAJE CON ORÁCULO PRO
+      </div>
+    `;
+  }
 }
 
 // --------- GENERAR AMPLIACIÓN IA ---------
@@ -247,12 +258,20 @@ function guardarUso(consultas) {
 }
 
 // --------- VOLVER ---------
-btnVolver.onclick = () => {
+btnVolver.addEventListener("click", () => {
 
-  pantallaResultado.style.display = "none";
+  pantallaResultado.hidden = true;
   vistaConsulta.style.display = "block";
 
+  // Nueva consulta = campo completamente limpio.
+  preguntaInput.value = "";
+
   respuestaEl.innerHTML = "";
+  ampliacionEl.innerHTML = "";
 
   window.scrollTo({ top: 0, behavior: "smooth" });
-};
+});
+
+
+// Inicialización
+actualizarAmpliacion();
