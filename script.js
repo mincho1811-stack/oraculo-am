@@ -169,8 +169,6 @@ btnConsultar.addEventListener("click", () => {
   const uso = obtenerUsoHoy();
   const limite = esPro() ? LIMITE_PRO : LIMITE_GRATIS;
 
-  // El límite diario se respeta, pero el aviso se muestra en la pantalla
-  // de resultado para que el botón nunca parezca "muerto".
   if (uso.consultas >= limite) {
     respuestaEl.innerHTML = `
       <div class="limite">
@@ -178,10 +176,8 @@ btnConsultar.addEventListener("click", () => {
         ${esPro() ? "" : "ACTIVA EL ORÁCULO PRO PARA ACCEDER A MÁS RESPUESTAS."}
       </div>
     `;
-
     vistaConsulta.style.display = "none";
-    pantallaResultado.hidden = false;
-
+    pantallaResultado.style.display = "block";
     window.scrollTo({ top: 0, behavior: "smooth" });
     return;
   }
@@ -191,23 +187,23 @@ btnConsultar.addEventListener("click", () => {
     : generarOraculo();
 
   respuestaEl.innerHTML = `<div class="cargando">CONECTANDO CON LO SUPERIOR...</div>`;
+  ampliacionEl.innerHTML = "";
 
   vistaConsulta.style.display = "none";
-  pantallaResultado.hidden = false;
-
+  pantallaResultado.style.display = "block";
   guardarUso(uso.consultas + 1);
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
-
-  // Evita que una respuesta pendiente de una consulta anterior
-  // aparezca después de haber vuelto a Inicio.
   setTimeout(() => {
-    // Solo muestra la respuesta si seguimos en la pantalla de resultado.
-    if (!pantallaResultado.hidden) {
+    // Si el usuario volvió antes de que terminara la animación,
+    // no volvemos a escribir una respuesta en la pantalla oculta.
+    if (pantallaResultado.style.display !== "none") {
       respuestaEl.innerHTML = html;
+      actualizarAmpliacion();
     }
   }, 1800);
-};
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
 // --------- Simular IA ---------
 function ampliacionIA(texto) {
@@ -260,18 +256,15 @@ function guardarUso(consultas) {
 // --------- VOLVER ---------
 btnVolver.addEventListener("click", () => {
 
-  pantallaResultado.hidden = true;
+  pantallaResultado.style.display = "none";
   vistaConsulta.style.display = "block";
-
-  // Nueva consulta = campo completamente limpio.
-  preguntaInput.value = "";
 
   respuestaEl.innerHTML = "";
   ampliacionEl.innerHTML = "";
+  preguntaInput.value = "";
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-
-// Inicialización
+// Preparar el bloque PRO sin mostrar contenido de una consulta anterior.
 actualizarAmpliacion();
