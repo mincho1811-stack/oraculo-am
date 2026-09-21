@@ -1,5 +1,6 @@
 // --------- CONFIG ---------
-const PROBABILIDAD_ARCANO = 0.35; // 35% arcano, 65% oráculo
+const PROBABILIDAD_ARCANO = 0.35;
+const MODO_PRUEBA_ARCANO = true; // TEMPORAL: true = 100% Arcanos // 35% arcano, 65% oráculo
 
 // --------- DOM ---------
 const btnConsultar = document.getElementById("consultar");
@@ -157,7 +158,7 @@ btnConsultar.addEventListener("click", () => {
     return;
   }
 
-  const html = Math.random() < PROBABILIDAD_ARCANO
+  const html = (MODO_PRUEBA_ARCANO || Math.random() < PROBABILIDAD_ARCANO)
     ? generarArcano()
     : generarOraculo();
 
