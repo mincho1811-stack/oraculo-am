@@ -161,3 +161,6 @@ footer {
   opacity: 0.4;
 }
 
+
+#consultar:disabled { opacity: 0.6; cursor: wait; }
+
