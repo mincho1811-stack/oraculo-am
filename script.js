@@ -43,60 +43,31 @@ const arcanosMayores = [
 ];
 
 // --------- BANCO ---------
-const banco = {
-  palabras: [
-    "SÍ.","NO.","MAGIA.","ELIGE.","BARRERA.","POSITIVO.","NEGATIVO.","INDIFERENTE.","DIOS.","AMOR.","MARAVILLA.","UNIVERSO.","¡CERTEZA!","CULPA.","PRESENTE.","RESPIRA.","SILENCIO.","UMBRAL.","PAUSA.","OBSERVA.","RECUERDA.","ESPERA.","CAMBIO.","CLARIDAD.","ORIGEN.","ENTREGA.",
-    "FLUYE.","DESPIERTA.","ACEPTA.","¡CONFÍA!","SUELTA.","TRANSFORMA.","INTEGRA.","SOSTÉN.","RENUEVA.","PERMITE.",
-    "ESCUCHA.","REVELA.","ALINEA.","DESCIENDE.","ASCIENDE.","CRUZA.","MIRA.","RECIBE.","VACÍA.","ABRE."
-  ],
+// El banco se carga desde data/banco.json para que pueda ampliarse sin tocar este archivo.
+let banco = null;
+let bancoCargado = false;
 
-  frases_cortas: [
-    "TODO COMIENZA DENTRO.",
-    "NO ES EL MOMENTO.",
-    "CONFÍA EN EL PROCESO.",
-    "LO SIMPLE ES PROFUNDO.",
-    "NO FUERCES LA RESPUESTA.",
-    "AÚN NO ES CLARO.",
-    "LO SABES, PERO NO LO ESCUCHAS.",
-    "HAY ALGO QUE NO ESTÁS VIENDO.",
-    "LA RESPUESTA YA EXISTE.",
-    "EL TIEMPO ES PARTE DE LA RESPUESTA.",
-    "NO TODO DEBE RESOLVERSE AHORA.",
-    "LO QUE RESISTES, PERSISTE.",
-    "ES MOMENTO DE DETENERTE.",
-    "LO QUE BUSCAS TE ESTÁ BUSCANDO.",
-    "NO INTERVENGAS.",
-    "PERMITE QUE OCURRA.",
-    "HAY MÁS DE UNA VERDAD.",
-    "NO CONFUNDAS URGENCIA CON IMPORTANCIA.",
-    "LO ESENCIAL NO CAMBIA.",
-    "EL RUIDO NO ES GUÍA."
-  ],
+async function cargarBanco() {
+  try {
+    const respuesta = await fetch("data/banco.json", { cache: "no-store" });
+    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
 
-  frases_largas: [
-    "LA AUSENCIA DE RESPUESTA, TAMBIÉN ES UNA RESPUESTA.",
-    "LO QUE BUSCAS NO SE REVELA CUANDO INSISTES, SINO CUANDO PERMITES.",
-    "A VECES LA RESPUESTA ES CAMINAR SIN SABER HACIA DÓNDE.",
-    "CUANDO CESAS LA BÚSQUEDA, LA RESPUESTA APARECE.",
-    "EL SILENCIO NO ES AUSENCIA, ES PRESENCIA PLENA.",
-    "LO QUE PARECE DETENIDO ESTÁ REORDENÁNDOSE EN UN NIVEL QUE AÚN NO VES.",
-    "NO TODO LO QUE SE CIERRA ES UNA PÉRDIDA; A VECES ES PROTECCIÓN.",
-    "CUANDO INTENTAS FORZAR EL CAMINO, TE ALEJAS DE ÉL.",
-    "HAY RESPUESTAS QUE SOLO LLEGAN CUANDO DEJAS DE HACER LA PREGUNTA.",
-    "LO QUE HOY TE CONFUNDE, MAÑANA TE DARÁ CLARIDAD.",
-    "A VECES EL SIGUIENTE PASO ES NO DAR NINGÚN PASO.",
-    "LO QUE NO COMPRENDES AÚN, NO SIGNIFICA QUE ESTÉ MAL.",
-    "LA RESPUESTA NO SIEMPRE ES ACCIÓN; A VECES ES ESPERA.",
-    "LO QUE EVITAS MIRAR CONTIENE PARTE DE LA VERDAD.",
-    "NO TODO DEBE SER ENTENDIDO PARA SER ACEPTADO.",
-    "CUANDO SUELTAS EL CONTROL, EMPIEZAS A VER.",
-    "LO QUE CREES QUE FALTA, TAL VEZ SOLO NECESITA TIEMPO.",
-    "HAY MOVIMIENTOS INVISIBLES SOSTENIENDO LO QUE VES.",
-    "LO QUE HOY DUELE, TAMBIÉN ESTÁ ENSEÑANDO.",
-    "NO TODO LO QUE TERMINA, TERMINA REALMENTE.",
-    "LO QUE PARECE INCERTIDUMBRE ES UN UMBRAL."
-  ]
-};
+    banco = await respuesta.json();
+    bancoCargado = true;
+    btnConsultar.disabled = false;
+    btnConsultar.removeAttribute("aria-disabled");
+  } catch (error) {
+    console.error("No se pudo cargar el banco del Oráculo AM:", error);
+    btnConsultar.disabled = true;
+    btnConsultar.setAttribute("aria-disabled", "true");
+    respuestaEl.innerHTML = `
+      <div class="limite">
+        NO SE PUDO CARGAR EL BANCO DEL ORÁCULO.<br><br>
+        RECARGA LA PÁGINA E INTÉNTALO DE NUEVO.
+      </div>
+    `;
+  }
+}
 
 // --------- UTIL ---------
 function elegir(arr) {
@@ -165,6 +136,10 @@ function generarArcano() {
 
 // --------- CONSULTAR ---------
 btnConsultar.addEventListener("click", () => {
+
+  if (!bancoCargado || !banco) {
+    return;
+  }
 
   const uso = obtenerUsoHoy();
   const limite = esPro() ? LIMITE_PRO : LIMITE_GRATIS;
@@ -268,3 +243,6 @@ btnVolver.addEventListener("click", () => {
 
 // Preparar el bloque PRO sin mostrar contenido de una consulta anterior.
 actualizarAmpliacion();
+
+// Cargar el banco externo antes de permitir consultas.
+cargarBanco();
