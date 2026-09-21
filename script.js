@@ -1,6 +1,5 @@
 // --------- CONFIG ---------
-const PROBABILIDAD_ARCANO = 0.35;
-const MODO_PRUEBA_ARCANO = true; // TEMPORAL: true = 100% Arcanos // 35% arcano, 65% oráculo
+const PROBABILIDAD_ARCANO = 0.35; // 35% arcano, 65% oráculo
 
 // --------- DOM ---------
 const btnConsultar = document.getElementById("consultar");
@@ -102,15 +101,15 @@ function generarOraculo() {
     const tipo = Math.random();
 
     if (tipo < 0.4) {
-      resultado.push(`<div class="palabra">${elegir(banco.palabras)}</div>`);
+      resultado.push(`<div class="respuesta-elemento palabra">${elegir(banco.palabras)}</div>`);
     } else if (tipo < 0.7) {
-      resultado.push(`<div class="frase-corta">${elegir(banco.frases_cortas)}</div>`);
+      resultado.push(`<div class="respuesta-elemento frase-corta">${elegir(banco.frases_cortas)}</div>`);
     } else {
-      resultado.push(`<div class="frase-larga">${elegir(banco.frases_largas)}</div>`);
+      resultado.push(`<div class="respuesta-elemento frase-larga">${elegir(banco.frases_largas)}</div>`);
     }
   }
 
-  return `<div class="oraculo">${resultado.join("")}</div>`;
+  return `<div class="oraculo respuesta-simple">${resultado.join("")}</div>`;
 }
 
 
@@ -158,7 +157,7 @@ btnConsultar.addEventListener("click", () => {
     return;
   }
 
-  const html = (MODO_PRUEBA_ARCANO || Math.random() < PROBABILIDAD_ARCANO)
+  const html = Math.random() < PROBABILIDAD_ARCANO
     ? generarArcano()
     : generarOraculo();
 
