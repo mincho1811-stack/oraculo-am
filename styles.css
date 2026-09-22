@@ -166,62 +166,215 @@ footer {
 
 
 /* =========================================================
-   RESPUESTAS MÚLTIPLES — SEPARACIÓN VISUAL
-   Cada elemento se percibe como una respuesta independiente.
+   RESULTADOS — CENTRADO Y SEPARACIÓN VISUAL
    ========================================================= */
 
-.respuesta-simple {
+#pantalla-resultado {
   width: 100%;
   max-width: 760px;
   margin: 0 auto;
+  padding: 3.5rem 1rem 2rem;
+  box-sizing: border-box;
   text-align: center;
 }
 
-.respuesta-simple .respuesta-elemento {
+#respuesta {
+  width: 100%;
+  text-align: center;
+}
+
+#respuesta .respuesta-simple {
+  /* Anula las reglas generales de .oraculo porque este
+     contenedor interno solo organiza las respuestas. */
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#respuesta .respuesta-simple .respuesta-elemento {
   width: 100%;
   box-sizing: border-box;
-  margin: 0 auto;
-  padding: 0 14px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 12px;
   text-align: center;
+  align-self: center;
 }
 
-.respuesta-simple .respuesta-elemento + .respuesta-elemento {
-  margin-top: 42px;
+#respuesta .respuesta-simple .respuesta-elemento + .respuesta-elemento {
+  margin-top: 58px;
 }
 
-.respuesta-simple .palabra {
-  font-size: clamp(1.7rem, 5vw, 2.8rem);
+#respuesta .respuesta-simple .palabra {
+  max-width: 760px;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
   line-height: 1.15;
   letter-spacing: 0.08em;
 }
 
-.respuesta-simple .frase-corta {
-  max-width: 680px;
+#respuesta .respuesta-simple .frase-corta {
+  max-width: 650px;
   font-size: clamp(1.2rem, 3.6vw, 1.75rem);
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
-.respuesta-simple .frase-larga {
-  max-width: 680px;
+#respuesta .respuesta-simple .frase-larga {
+  max-width: 650px;
   font-size: clamp(1.05rem, 3.1vw, 1.5rem);
   line-height: 1.65;
 }
 
+/* La invitación a PRO no es una respuesta.
+   Queda visualmente separada del contenido del Oráculo. */
+#ampliacion-ia {
+  width: 100%;
+  text-align: center;
+}
+
+#ampliacion-ia .bloque-pro {
+  max-width: 520px;
+  margin: 5.5rem auto 0;
+  padding: 1.4rem 1rem 0;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  opacity: 0.7;
+}
+
+#ampliacion-ia .bloque-pro::before {
+  content: "PRO";
+  display: block;
+  margin-bottom: 0.9rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  opacity: 0.6;
+}
+
 @media (max-width: 600px) {
-  .respuesta-simple .respuesta-elemento {
+  #pantalla-resultado {
+    padding: 2.5rem 0.8rem 1.5rem;
+  }
+
+  #respuesta .respuesta-simple .respuesta-elemento {
     padding: 0 10px;
   }
 
-  .respuesta-simple .respuesta-elemento + .respuesta-elemento {
-    margin-top: 34px;
+  #respuesta .respuesta-simple .respuesta-elemento + .respuesta-elemento {
+    margin-top: 46px;
   }
 
-  .respuesta-simple .palabra {
+  #respuesta .respuesta-simple .palabra {
     letter-spacing: 0.06em;
   }
 
-  .respuesta-simple .frase-larga {
+  #respuesta .respuesta-simple .frase-larga {
     line-height: 1.55;
+  }
+
+  #ampliacion-ia .bloque-pro {
+    margin-top: 4.5rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+    font-size: 0.78rem;
+  }
+}
+
+
+/* =========================================================
+   ARMONÍA DEL SELLO, FIRMA Y PIE DE PÁGINA
+   ========================================================= */
+
+#pantalla-resultado .oracle-seal {
+  width: 100%;
+  max-width: 360px;
+  margin: 5.5rem auto 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#pantalla-resultado .seal-crystal {
+  display: block;
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  margin: 0 auto 0.55rem;
+}
+
+#pantalla-resultado .oracle-sign {
+  margin: 0;
+  line-height: 1.35;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+#pantalla-resultado .firma-personal {
+  display: block;
+  width: 92px;
+  max-width: 30%;
+  height: auto;
+  object-fit: contain;
+  margin: 0.55rem auto 0;
+}
+
+#pantalla-resultado #volver {
+  display: block;
+  margin: 2.2rem auto 0;
+}
+
+footer {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 4.5rem auto 0;
+  padding: 0.5rem 1rem 1.5rem;
+  text-align: center;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  opacity: 0.68;
+}
+
+@media (max-width: 600px) {
+  #pantalla-resultado .oracle-seal {
+    max-width: 300px;
+    margin-top: 4.5rem;
+  }
+
+  #pantalla-resultado .seal-crystal {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.45rem;
+  }
+
+  #pantalla-resultado .oracle-sign {
+    font-size: 0.82rem;
+  }
+
+  #pantalla-resultado .firma-personal {
+    width: 82px;
+    margin-top: 0.5rem;
+  }
+
+  #pantalla-resultado #volver {
+    margin-top: 1.9rem;
+  }
+
+  footer {
+    margin-top: 3.5rem;
+    padding-bottom: 1.25rem;
+    font-size: 0.68rem;
   }
 }
 
