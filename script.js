@@ -1,5 +1,5 @@
 // --------- CONFIG ---------
-const PROBABILIDAD_ARCANO = 0.35; // 35% arcano, 65% oráculo
+const PROBABILIDAD_ARCANO = 0.11; // FREE: 11% arcano, 89% oráculo. PRO usará 35% en la lógica protegida.
 
 // --------- DOM ---------
 const btnConsultar = document.getElementById("consultar");
