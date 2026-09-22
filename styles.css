@@ -378,3 +378,56 @@ footer {
   }
 }
 
+
+/* =========================================================
+   AJUSTE FINAL DE ESPACIOS INFERIORES
+   El pie de página acompaña al contenido sin quedar aislado.
+   ========================================================= */
+
+/* Pantalla de inicio */
+#vista-consulta footer,
+.oraculo > footer {
+  margin-top: 2rem;
+  padding-top: 0.35rem;
+  padding-bottom: 1rem;
+}
+
+/* Pantalla de resultado: el sello ya tiene su propio espacio,
+   por lo que el pie no necesita una separación tan grande. */
+#pantalla-resultado + footer,
+#pantalla-resultado ~ footer,
+main.oraculo > footer {
+  margin-top: 2rem;
+}
+
+/* En el resultado, compactamos un poco el tramo:
+   firma → Volver → pie. */
+#pantalla-resultado .oracle-seal {
+  margin-top: 4.2rem;
+}
+
+#pantalla-resultado #volver {
+  margin-top: 1.7rem;
+}
+
+@media (max-width: 600px) {
+  #vista-consulta footer,
+  .oraculo > footer {
+    margin-top: 1.5rem;
+    padding-bottom: 0.9rem;
+  }
+
+  #pantalla-resultado .oracle-seal {
+    margin-top: 3.7rem;
+  }
+
+  #pantalla-resultado #volver {
+    margin-top: 1.5rem;
+  }
+
+  #pantalla-resultado ~ footer,
+  main.oraculo > footer {
+    margin-top: 1.5rem;
+  }
+}
+
