@@ -46,13 +46,14 @@ export async function onRequestPost(context) {
     const day = parts.find(p => p.type === "day")?.value;
     const fechaLocal = `${year}-${month}-${day}`;
 
-    await env.DB.prepare(`
+    const incremento = await env.DB.prepare(`
       INSERT INTO consultas_diarias (usuario_id, fecha, cantidad)
       VALUES (?, ?, 1)
       ON CONFLICT(usuario_id, fecha)
       DO UPDATE SET cantidad = cantidad + 1
       WHERE cantidad < ?
-    `).bind(user.id, fechaLocal, limite).run();
+      RETURNING cantidad
+    `).bind(user.id, fechaLocal, limite).first();
 
     const registro = await env.DB.prepare(`
       SELECT cantidad
@@ -62,7 +63,7 @@ export async function onRequestPost(context) {
     `).bind(user.id, fechaLocal).first();
 
     const usadas = Number(registro?.cantidad || 0);
-    const permitida = usadas > 0 && usadas <= limite;
+    const permitida = incremento !== null && incremento !== undefined;
 
     return Response.json({
       ok: true,
