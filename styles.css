@@ -511,3 +511,24 @@ main.oraculo > footer {
   outline-offset: 5px;
   border-radius: 8px;
 }
+
+
+/* Acceso visible a Oráculo PRO desde la pantalla inicial */
+.pro-abrir {
+  display: block;
+  margin: 12px auto 0;
+  padding: 9px 20px;
+  border: 1px solid rgba(190, 170, 255, 0.55);
+  border-radius: 24px;
+  background: transparent;
+  color: #d9ccff;
+  font: inherit;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.pro-abrir:hover, .pro-abrir:focus-visible {
+  background: rgba(126, 93, 211, 0.2);
+  border-color: #c5adff;
+  outline: none;
+}
