@@ -44,6 +44,26 @@
 
     <button id="consultar" type="button">Consultar</button>
 
+    <section id="pro-acceso" class="pro-acceso" hidden>
+      <div class="pro-acceso-inner">
+        <div class="pro-etiqueta">ORÁCULO PRO</div>
+        <p class="pro-intro">Accede a tu cuenta PRO mediante un código enviado a tu correo.</p>
+
+        <div id="pro-email-paso">
+          <input type="email" id="pro-email" placeholder="Tu correo electrónico" autocomplete="email">
+          <button id="pro-enviar-codigo" type="button">Enviar código</button>
+        </div>
+
+        <div id="pro-codigo-paso" hidden>
+          <input type="text" id="pro-codigo" placeholder="Código de 6 dígitos" inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+          <button id="pro-verificar-codigo" type="button">Verificar código</button>
+        </div>
+
+        <div id="pro-mensaje" class="pro-mensaje" aria-live="polite"></div>
+        <button id="pro-cerrar" class="pro-cerrar" type="button">Cerrar</button>
+      </div>
+    </section>
+
     <!-- APORTES -->
     <section class="aporte">
       <p>Si este Oráculo te ayudó,<br>puedes sostener su existencia.</p>
