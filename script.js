@@ -20,6 +20,7 @@ const proEnviarCodigo = document.getElementById("pro-enviar-codigo");
 const proVerificarCodigo = document.getElementById("pro-verificar-codigo");
 const proMensaje = document.getElementById("pro-mensaje");
 const proCerrar = document.getElementById("pro-cerrar");
+const proAbrir = document.getElementById("pro-abrir");
 
 const LIMITE_GRATIS = 1;
 const LIMITE_PRO = 7;
@@ -143,6 +144,8 @@ function actualizarAmpliacion(){
 function generarAmpliacion(){
   return `<div class="ampliacion"><h3>Ampliación</h3><p>La respuesta no es literal. Observa cómo se manifiesta en tu situación actual. Hay matices que solo se revelan con el tiempo.</p></div>`;
 }
+
+proAbrir.addEventListener("click", abrirPro);
 
 function abrirPro(){
   proAcceso.hidden=false;proMensaje.textContent="";proEmail.focus();
