@@ -28,6 +28,7 @@ let estadoPro = false;
 let banco = null;
 let bancoCargado = false;
 let consultaAutorizada = false;
+let resultadoActual = null;
 
 const arcanosMayores = [
   {romano:"0",nombre:"El Loco",imagen:"img/arcanos/00_el_loco.jpg",derecho:"Inicio, apertura, confianza en el viaje del alma. Un inicio sin garantías, pero lleno de posibilidad.",invertido:"Impulsividad sin dirección, dispersión, miedo a avanzar. Riesgo de no ver lo evidente."},
@@ -71,14 +72,21 @@ function elegir(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function cantidadElementos(){return elegir([1,3,5]);}
 
 function generarOraculo(){
-  const cantidad=cantidadElementos();let resultado=[];
+  const cantidad=cantidadElementos();let elementos=[];
   for(let i=0;i<cantidad;i++){
     const tipo=Math.random();
-    if(tipo<0.4)resultado.push(`<div class="respuesta-elemento palabra">${elegir(banco.palabras)}</div>`);
-    else if(tipo<0.7)resultado.push(`<div class="respuesta-elemento frase-corta">${elegir(banco.frases_cortas)}</div>`);
-    else resultado.push(`<div class="respuesta-elemento frase-larga">${elegir(banco.frases_largas)}</div>`);
+    if(tipo<0.4){
+      const texto=elegir(banco.palabras);
+      elementos.push({html:`<div class="respuesta-elemento palabra">${texto}</div>`,texto});
+    }else if(tipo<0.7){
+      const texto=elegir(banco.frases_cortas);
+      elementos.push({html:`<div class="respuesta-elemento frase-corta">${texto}</div>`,texto});
+    }else{
+      const texto=elegir(banco.frases_largas);
+      elementos.push({html:`<div class="respuesta-elemento frase-larga">${texto}</div>`,texto});
+    }
   }
-  return `<div class="oraculo respuesta-simple">${resultado.join("")}</div>`;
+  return {html:`<div class="oraculo respuesta-simple">${elementos.map(e=>e.html).join("")}</div>`,texto:elementos.map(e=>e.texto).join("\\n"),tipo:"respuesta_simple"};
 }
 
 function generarArcano(){
@@ -86,7 +94,7 @@ function generarArcano(){
   const titulo=invertido?`${carta.romano}. ${carta.nombre} (INVERTIDO)`: `${carta.romano}. ${carta.nombre}`;
   const texto=invertido?carta.invertido:carta.derecho;
   const rotacion=invertido?"rotate(180deg)":"rotate(0deg)";
-  return `<div class="arcano"><h2>${titulo}</h2><img src="${carta.imagen}" style="max-width:200px;transform:${rotacion};"><p>${texto}</p></div>`;
+  return {html:`<div class="arcano"><h2>${titulo}</h2><img src="${carta.imagen}" style="max-width:200px;transform:${rotacion};"><p>${texto}</p></div>`,texto:`${titulo}. ${texto}`,tipo:"arcano"};
 }
 
 async function autorizarConsulta(){
@@ -109,7 +117,8 @@ btnConsultar.addEventListener("click",async()=>{
 
     estadoPro=Boolean(data.pro_activo);
     const probabilidadArcano=Number(data.probabilidad_arcano)||PROBABILIDAD_ARCANO_FREE;
-    const html=Math.random()<probabilidadArcano?generarArcano():generarOraculo();
+    resultadoActual=Math.random()<probabilidadArcano?generarArcano():generarOraculo();
+    const html=resultadoActual.html;
     respuestaEl.innerHTML=`<div class="cargando">CONECTANDO CON LO SUPERIOR...</div>`;
     ampliacionEl.innerHTML="";
     vistaConsulta.style.display="none";pantallaResultado.style.display="block";
@@ -117,7 +126,7 @@ btnConsultar.addEventListener("click",async()=>{
     setTimeout(()=>{
       if(pantallaResultado.style.display!=="none"){
         respuestaEl.innerHTML=html;
-        actualizarAmpliacion();
+        actualizarAmpliacion(resultadoActual, preguntaInput.value.trim());
       }
     },1800);
     window.scrollTo({top:0,behavior:"smooth"});
@@ -131,9 +140,19 @@ btnConsultar.addEventListener("click",async()=>{
   }
 });
 
-function actualizarAmpliacion(){
+function actualizarAmpliacion(resultado=null, pregunta=""){
   if(estadoPro){
-    ampliacionEl.innerHTML=generarAmpliacion();
+    const textoRespuesta=resultado?.texto || resultadoActual?.texto || "";
+    ampliacionEl.innerHTML=`
+      <section class="ampliacion ampliacion-pro">
+        <h3>Ampliación</h3>
+        <p class="ampliacion-intro">Profundiza en el mensaje recibido desde una mirada de atención, autoobservación y trabajo interior.</p>
+        <button type="button" id="btn-ampliar-ia" class="btn-ampliar-ia">Ampliar con inteligencia artificial</button>
+        <p class="ampliacion-privacidad">Al solicitar la ampliación, el mensaje y, si escribiste una, tu pregunta se envían a Cloudflare Workers AI para generar la interpretación. Oráculo AM no guarda el texto de tu pregunta.</p>
+        <div id="resultado-ampliacion-ia" aria-live="polite"></div>
+      </section>`;
+    const boton=document.getElementById("btn-ampliar-ia");
+    boton?.addEventListener("click",()=>solicitarAmpliacionIA(textoRespuesta,pregunta));
   }else{
     ampliacionEl.innerHTML=`<div class="bloque-pro" role="button" tabindex="0" id="bloque-pro-acceso">ACCEDE A LA AMPLIACIÓN DEL MENSAJE CON ORÁCULO PRO</div>`;
     const bloque=document.getElementById("bloque-pro-acceso");
@@ -141,8 +160,26 @@ function actualizarAmpliacion(){
   }
 }
 
-function generarAmpliacion(){
-  return `<div class="ampliacion"><h3>Ampliación</h3><p>La respuesta no es literal. Observa cómo se manifiesta en tu situación actual. Hay matices que solo se revelan con el tiempo.</p></div>`;
+async function solicitarAmpliacionIA(respuesta,pregunta){
+  const boton=document.getElementById("btn-ampliar-ia");
+  const salida=document.getElementById("resultado-ampliacion-ia");
+  if(!boton||!salida||!respuesta)return;
+  boton.disabled=true;
+  salida.textContent="Preparando la ampliación…";
+  try{
+    const r=await fetch("/api/ampliar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({respuesta,pregunta})});
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok||!data.ok)throw new Error(data.error||"No fue posible generar la ampliación.");
+    const parrafo=document.createElement("p");
+    parrafo.className="ampliacion-texto-ia";
+    parrafo.textContent=data.ampliacion;
+    salida.replaceChildren(parrafo);
+    boton.textContent="Ampliación generada";
+  }catch(error){
+    console.error("Error en ampliación IA:",error);
+    salida.textContent=error.message||"No fue posible generar la ampliación. Inténtalo más tarde.";
+    boton.disabled=false;
+  }
 }
 
 proAbrir.addEventListener("click", abrirPro);
