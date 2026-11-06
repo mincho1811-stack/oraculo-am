@@ -115,8 +115,11 @@ button.secundario {
 
 /* ARCANO */
 .arcano {
-  text-align: center;
+  width: 100%;
   max-width: 420px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .arcano-img {
