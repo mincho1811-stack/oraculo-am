@@ -148,7 +148,7 @@ function actualizarAmpliacion(resultado=null, pregunta=""){
         <h3>Ampliación</h3>
         <p class="ampliacion-intro">Profundiza en el mensaje recibido desde una mirada de atención, autoobservación y trabajo interior.</p>
         <button type="button" id="btn-ampliar-ia" class="btn-ampliar-ia">Ampliar con inteligencia artificial</button>
-        <p class="ampliacion-privacidad">Al solicitar la ampliación, el mensaje y, si escribiste una, tu pregunta se envían a Cloudflare Workers AI para generar la interpretación. Oráculo AM no guarda el texto de tu pregunta.</p>
+        <p class="ampliacion-privacidad">Tu pregunta no se guarda en Oráculo AM.</p>
         <div id="resultado-ampliacion-ia" aria-live="polite"></div>
       </section>`;
     const boton=document.getElementById("btn-ampliar-ia");
