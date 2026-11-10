@@ -572,3 +572,191 @@ main.oraculo > footer {
   white-space: pre-line;
   text-align: center;
 }
+
+
+/* =========================================================
+   INFORMACIÓN DE USO, BENEFICIOS PRO Y APORTES
+   ========================================================= */
+
+.mensaje-apertura {
+  margin: 1.6rem auto 1.8rem;
+  line-height: 1.55;
+  letter-spacing: 0.015em;
+}
+
+.mensaje-apertura strong {
+  letter-spacing: 0.12em;
+}
+
+.guia-consulta,
+.pro-beneficios {
+  width: 100%;
+  max-width: 540px;
+  margin: 2rem auto;
+  padding: 1.35rem 1.45rem;
+  box-sizing: border-box;
+  border: 1px solid rgba(220, 207, 255, 0.22);
+  border-radius: 18px;
+  background: rgba(10, 8, 35, 0.19);
+  text-align: center;
+}
+
+.guia-consulta h3,
+.pro-beneficios h3 {
+  margin: 0 0 0.85rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  font-weight: normal;
+}
+
+.guia-consulta p,
+.pro-beneficios p {
+  line-height: 1.6;
+}
+
+.guia-destacado {
+  margin: 0.3rem 0 0.75rem;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+}
+
+.peso-respuestas {
+  margin: 1.15rem auto 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(220, 207, 255, 0.16);
+  font-size: 0.9rem;
+}
+
+.peso-respuestas p {
+  margin: 0.45rem 0;
+}
+
+.preparacion em {
+  display: inline-block;
+  margin-top: 0.3rem;
+  font-size: 0.88rem;
+}
+
+.pro-beneficios {
+  margin-top: 2.2rem;
+  border-color: rgba(183, 155, 255, 0.42);
+  background: linear-gradient(145deg, rgba(106, 90, 205, 0.16), rgba(10, 8, 35, 0.22));
+}
+
+.pro-precio {
+  margin: 0.25rem 0 0.15rem;
+  font-size: 1rem;
+}
+
+.pro-precio strong {
+  font-size: 1.8rem;
+  font-weight: normal;
+  letter-spacing: 0.02em;
+}
+
+.pro-precio span {
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+
+.pro-resumen {
+  margin: 0.4rem auto 1rem;
+  opacity: 0.82;
+  font-size: 0.9rem;
+}
+
+.pro-beneficios ul {
+  max-width: 420px;
+  margin: 0.8rem auto;
+  padding-left: 1.25rem;
+  text-align: left;
+  line-height: 1.65;
+  font-size: 0.91rem;
+}
+
+.pro-beneficios li {
+  margin: 0.45rem 0;
+  padding-left: 0.15rem;
+}
+
+.pro-nota {
+  margin: 1rem auto 0;
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.pro-abrir {
+  margin-top: 0.5rem;
+}
+
+.aporte {
+  max-width: 420px;
+  margin: 3rem auto 0;
+  padding: 1.1rem 1rem 1.25rem;
+  border-top: 1px solid rgba(220, 207, 255, 0.17);
+  opacity: 1;
+}
+
+.aporte > p:first-child {
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+  opacity: 0.95;
+}
+
+.aporte .nota {
+  margin: 0.45rem auto;
+  font-size: 0.78rem;
+  opacity: 0.72;
+}
+
+.kofi-enlace {
+  display: inline-block;
+  margin: 0.75rem auto 0.5rem;
+  padding: 0.72rem 1.35rem;
+  border: 1px solid rgba(213, 190, 255, 0.65);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(106, 90, 205, 0.42);
+  text-decoration: none;
+  font-size: 0.92rem;
+  letter-spacing: 0.025em;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.kofi-enlace:hover,
+.kofi-enlace:focus-visible {
+  background: rgba(126, 93, 211, 0.68);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+@media (max-width: 600px) {
+  .mensaje-apertura {
+    margin-top: 1.3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .guia-consulta,
+  .pro-beneficios {
+    margin-top: 1.55rem;
+    margin-bottom: 1.55rem;
+    padding: 1.15rem 1rem;
+  }
+
+  .guia-consulta p,
+  .pro-beneficios p {
+    font-size: 0.9rem;
+  }
+
+  .pro-precio strong {
+    font-size: 1.65rem;
+  }
+
+  .pro-beneficios ul {
+    font-size: 0.87rem;
+  }
+
+  .aporte {
+    margin-top: 2.3rem;
+  }
+}
