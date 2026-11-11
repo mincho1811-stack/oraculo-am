@@ -183,7 +183,9 @@ export async function onRequestPost(context) {
     });
 
   } catch (error) {
-    return jsonResponse({
+  console.error("Error webhook Ko-fi:", error);
+
+  return jsonResponse({
       ok: false,
       error: error instanceof Error
         ? error.message
