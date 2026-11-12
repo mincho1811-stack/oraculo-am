@@ -10,20 +10,15 @@ function jsonResponse(data, status = 200) {
 }
 
 function safeEqual(a, b) {
-  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
-  let diff = 0;
-  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return diff === 0;
-}
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) {
+    return false;
+  }
 
-function addOneCalendarMonth(value) {
-  const date = new Date(value);
-  const day = date.getUTCDate();
-  date.setUTCDate(1);
-  date.setUTCMonth(date.getUTCMonth() + 1);
-  const lastDay = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)).getUTCDate();
-  date.setUTCDate(Math.min(day, lastDay));
-  return date.toISOString();
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return diff === 0;
 }
 
 function cleanPayload(payment) {
@@ -45,8 +40,6 @@ export async function onRequestPost(context) {
     return jsonResponse({ ok: false, error: "No está configurado el secreto de verificación." }, 500);
   }
 
-  let payment;
-
   try {
     const form = await context.request.formData();
     const rawData = form.get("data");
@@ -55,71 +48,107 @@ export async function onRequestPost(context) {
       return jsonResponse({ ok: false, error: "No se recibió el campo data de Ko-fi." }, 400);
     }
 
+    let receivedPayment;
+
     try {
-      payment = JSON.parse(rawData);
+      receivedPayment = JSON.parse(rawData);
     } catch {
       return jsonResponse({ ok: false, error: "El contenido recibido no es JSON válido." }, 400);
     }
 
-    if (!safeEqual(String(payment.verification_token || ""), String(KOFI_VERIFICATION_TOKEN))) {
+    if (!receivedPayment || typeof receivedPayment !== "object" || Array.isArray(receivedPayment)) {
+      return jsonResponse({ ok: false, error: "Los datos recibidos no tienen un formato válido." }, 400);
+    }
+
+    if (!safeEqual(
+      String(receivedPayment.verification_token || ""),
+      String(KOFI_VERIFICATION_TOKEN)
+    )) {
       console.warn("Ko-fi webhook: token no válido.");
       return jsonResponse({ ok: false, error: "Token de verificación no válido." }, 401);
     }
 
-    const transactionId = String(payment.kofi_transaction_id || "").trim() || null;
+    const transactionId = String(receivedPayment.kofi_transaction_id || "").trim() || null;
+
     const subscriptionId = String(
-      payment.kofi_subscription_id || payment.subscription_id || ""
+      receivedPayment.kofi_subscription_id ||
+      receivedPayment.subscription_id ||
+      ""
     ).trim() || null;
 
-    const email = String(payment.email || "").trim().toLowerCase();
-    const eventType = String(payment.type || "");
-    const tierName = String(payment.tier_name || "").trim();
-    const amount = Number(payment.amount);
-    const currency = String(payment.currency || "").toUpperCase();
-    const isSubscription = payment.is_subscription_payment === true;
+    const receivedEmail = String(receivedPayment.email || "").trim().toLowerCase();
+    const receivedType = String(receivedPayment.type || "unknown");
 
     // Registrar todas las notificaciones verificadas.
     // Nunca guardar el token secreto.
-    const insert = await DB.prepare(`
+    await DB.prepare(`
       INSERT OR IGNORE INTO eventos_kofi
         (transaction_id, subscription_id, email, event_type, payload, procesado)
       VALUES (?, ?, ?, ?, ?, 0)
     `).bind(
       transactionId,
       subscriptionId,
-      email || null,
-      eventType || "unknown",
-      cleanPayload(payment)
+      receivedEmail || null,
+      receivedType,
+      cleanPayload(receivedPayment)
     ).run();
 
-    // Evitar duplicados, pero permitir reintentar eventos pendientes.
-    if (Number(insert?.meta?.changes || 0) === 0 && transactionId) {
-      const existing = await DB.prepare(`
-        SELECT procesado FROM eventos_kofi
-        WHERE transaction_id = ? LIMIT 1
-      `).bind(transactionId).first();
-
-      if (Number(existing?.procesado || 0) === 1) {
-        return jsonResponse({
-          ok: true,
-          recibido: true,
-          duplicado: true,
-          procesado: true
-        });
-      }
+    // Recuperar el primer payload registrado para esa transacción.
+    if (!transactionId) {
+      return jsonResponse({
+        ok: true,
+        recibido: true,
+        procesado: false,
+        motivo: "Notificación registrada sin identificador de transacción."
+      });
     }
 
-    // Solo una membresía PRO válida puede activar el acceso.
+    const storedEvent = await DB.prepare(`
+      SELECT transaction_id, payload, procesado
+      FROM eventos_kofi
+      WHERE transaction_id = ?
+      LIMIT 1
+    `).bind(transactionId).first();
+
+    if (!storedEvent) {
+      throw new Error("No fue posible recuperar el evento registrado.");
+    }
+
+    if (Number(storedEvent.procesado) === 1) {
+      return jsonResponse({
+        ok: true,
+        recibido: true,
+        duplicado: true,
+        procesado: true
+      });
+    }
+
+    let payment;
+
+    try {
+      payment = JSON.parse(storedEvent.payload || "{}");
+    } catch {
+      throw new Error("El evento guardado contiene un payload no válido.");
+    }
+
+    const email = String(payment.email || "").trim().toLowerCase();
+    const eventType = String(payment.type || "");
+    const tierName = String(payment.tier_name || "").trim().toLowerCase();
+    const amount = Number(payment.amount);
+    const currency = String(payment.currency || "").trim().toUpperCase();
+    const isSubscription = payment.is_subscription_payment === true;
+
+    // Solo la membresía PRO exacta puede activar el acceso.
     const isProMembership =
       eventType === "Subscription" &&
       isSubscription &&
-      tierName.toLowerCase() === "oráculo am pro" &&
+      tierName === "oráculo am pro" &&
       currency === "USD" &&
       Number.isFinite(amount) &&
       amount >= 9.90;
 
     if (!isProMembership) {
-      console.log("Ko-fi: evento recibido sin activar PRO.", {
+      console.log("Ko-fi: evento registrado sin activar PRO.", {
         eventType,
         isSubscription,
         tierName: tierName || null,
@@ -135,94 +164,164 @@ export async function onRequestPost(context) {
       });
     }
 
-    if (!email || !email.includes("@") || email.length > 254 || !transactionId) {
+    if (!email || !email.includes("@") || email.length > 254) {
       return jsonResponse({
         ok: false,
-        error: "El pago PRO no contiene un correo o identificador válido."
+        error: "El pago PRO no contiene un correo válido."
       }, 400);
     }
 
-    // Crear la cuenta si todavía no existe.
+    const finalSubscriptionId = String(
+      payment.kofi_subscription_id ||
+      payment.subscription_id ||
+      ""
+    ).trim() || null;
+
+    // Crear el usuario si todavía no existe.
     await DB.prepare(`
       INSERT INTO usuarios (email, pro_activo, timezone)
       VALUES (?, 0, 'America/Bogota')
       ON CONFLICT(email) DO NOTHING
     `).bind(email).run();
 
-    const user = await DB.prepare(`
-      SELECT id, pro_inicio, pro_vencimiento
-      FROM usuarios
-      WHERE lower(email) = ?
-      LIMIT 1
-    `).bind(email).first();
+    const now = new Date().toISOString();
 
-    if (!user) {
-      throw new Error("No fue posible localizar la cuenta del miembro.");
-    }
+    /*
+      La actualización del usuario y el marcado del evento se ejecutan
+      dentro de un único batch transaccional de D1.
 
-    const now = new Date();
-    const expiryText = user.pro_vencimiento
-      ? String(user.pro_vencimiento)
-      : "";
+      Así, una transacción solo puede renovar PRO una vez.
+      La fecha se calcula usando el vencimiento vigente en la base de datos,
+      evitando perder renovaciones cuando llegan pagos distintos juntos.
+    */
 
-    const currentExpiry = expiryText
-      ? new Date(
-          expiryText.includes("T")
-            ? expiryText
-            : expiryText.replace(" ", "T") + "Z"
-        )
-      : null;
-
-    const baseDate =
-      currentExpiry &&
-      !Number.isNaN(currentExpiry.getTime()) &&
-      currentExpiry > now
-        ? currentExpiry
-        : now;
-
-    const newExpiry = addOneCalendarMonth(baseDate);
-
-    const updateUser = await DB.prepare(`
+    const updateUser = DB.prepare(`
+      WITH base AS (
+        SELECT
+          CASE
+            WHEN pro_vencimiento IS NOT NULL
+             AND julianday(pro_vencimiento) > julianday(?)
+            THEN pro_vencimiento
+            ELSE ?
+          END AS value
+        FROM usuarios
+        WHERE lower(email) = ?
+      ),
+      parts AS (
+        SELECT
+          value,
+          CAST(strftime('%d', value) AS INTEGER) AS day_number,
+          CAST(
+            strftime(
+              '%d',
+              date(value, 'start of month', '+2 months', '-1 day')
+            ) AS INTEGER
+          ) AS last_day
+        FROM base
+      )
       UPDATE usuarios
       SET pro_activo = 1,
           pro_inicio = COALESCE(pro_inicio, ?),
-          pro_vencimiento = ?,
+          pro_vencimiento = (
+            SELECT strftime(
+              '%Y-%m-%dT%H:%M:%SZ',
+              datetime(
+                date(
+                  value,
+                  'start of month',
+                  '+1 month',
+                  printf('+%d days', MIN(day_number - 1, last_day - 1))
+                ),
+                strftime('%H:%M:%S', value)
+              )
+            )
+            FROM parts
+          ),
           kofi_transaction_id = ?,
           kofi_subscription_id = COALESCE(?, kofi_subscription_id),
           updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
+      WHERE lower(email) = ?
+        AND EXISTS (
+          SELECT 1
+          FROM eventos_kofi
+          WHERE transaction_id = ?
+            AND procesado = 0
+        )
     `).bind(
-      now.toISOString(),
-      newExpiry,
+      now,
+      now,
+      email,
+      now,
       transactionId,
-      subscriptionId,
-      user.id
-    ).run();
+      finalSubscriptionId,
+      email,
+      transactionId
+    );
 
-    if (Number(updateUser?.meta?.changes || 0) !== 1) {
-      throw new Error("No se pudo actualizar el estado PRO.");
-    }
-
-    await DB.prepare(`
+    const markEvent = DB.prepare(`
       UPDATE eventos_kofi
       SET procesado = 1
       WHERE transaction_id = ?
-    `).bind(transactionId).run();
+        AND procesado = 0
+        AND EXISTS (
+          SELECT 1
+          FROM usuarios
+          WHERE lower(email) = ?
+            AND pro_activo = 1
+            AND pro_vencimiento IS NOT NULL
+        )
+    `).bind(transactionId, email);
 
-    console.log("Ko-fi: membresía PRO activada o renovada.", {
-      email,
-      amount,
-      currency,
-      pro_vencimiento: newExpiry
-    });
+    // D1 ejecuta ambas operaciones como una transacción.
+    const batchResults = await DB.batch([updateUser, markEvent]);
 
-    return jsonResponse({
-      ok: true,
-      recibido: true,
-      procesado: true,
-      pro_activo: true,
-      pro_vencimiento: newExpiry
-    });
+    const userChanges = Number(batchResults?.[0]?.meta?.changes || 0);
+    const eventChanges = Number(batchResults?.[1]?.meta?.changes || 0);
+
+    if (userChanges === 1 && eventChanges === 1) {
+      const updatedUser = await DB.prepare(`
+        SELECT pro_vencimiento
+        FROM usuarios
+        WHERE lower(email) = ?
+        LIMIT 1
+      `).bind(email).first();
+
+      console.log("Ko-fi: membresía PRO activada o renovada.", {
+        email,
+        amount,
+        currency,
+        pro_vencimiento: updatedUser?.pro_vencimiento || null
+      });
+
+      return jsonResponse({
+        ok: true,
+        recibido: true,
+        procesado: true,
+        pro_activo: true,
+        pro_vencimiento: updatedUser?.pro_vencimiento || null
+      });
+    }
+
+    // Otra solicitud pudo haber procesado la misma transacción primero.
+    const finalEvent = await DB.prepare(`
+      SELECT procesado
+      FROM eventos_kofi
+      WHERE transaction_id = ?
+      LIMIT 1
+    `).bind(transactionId).first();
+
+    if (Number(finalEvent?.procesado) === 1) {
+      return jsonResponse({
+        ok: true,
+        recibido: true,
+        duplicado: true,
+        procesado: true
+      });
+    }
+
+    throw new Error(
+      "No se pudo completar la activación PRO. El evento permanece pendiente para reintento."
+    );
 
   } catch (error) {
     console.error("Error webhook Ko-fi:", error);
