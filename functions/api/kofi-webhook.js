@@ -221,6 +221,7 @@ export async function onRequestPost(context) {
       )
       UPDATE usuarios
       SET pro_activo = 1,
+          pro_tipo = 'membresia',
           pro_inicio = COALESCE(pro_inicio, ?),
           pro_vencimiento = (
             SELECT strftime(
