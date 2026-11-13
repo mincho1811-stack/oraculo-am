@@ -64,7 +64,7 @@ async function getProUser(DB, request) {
   const tokenHash = await sha256Hex(token);
   const session = await DB.prepare(`
     SELECT s.id AS sesion_id, s.usuario_id, s.expira_at AS sesion_expira_at,
-           s.revocada, u.email, u.pro_activo, u.pro_vencimiento, u.timezone
+           s.revocada, u.email, u.pro_activo, u.pro_tipo, u.pro_vencimiento, u.timezone
     FROM sesiones s
     INNER JOIN usuarios u ON u.id = s.usuario_id
     WHERE s.token_hash = ?
@@ -77,11 +77,14 @@ async function getProUser(DB, request) {
   const sessionExpires = parseDate(session.sesion_expira_at);
   const proExpires = parseDate(session.pro_vencimiento);
 
+  const accesoEspecial = ["propietario", "cortesia"].includes(String(session.pro_tipo || ""));
+  const proVigente = Number(session.pro_activo) === 1 &&
+    (accesoEspecial || (proExpires && proExpires > now));
+
   if (
     Number(session.revocada) !== 0 ||
     !sessionExpires || sessionExpires <= now ||
-    Number(session.pro_activo) !== 1 ||
-    !proExpires || proExpires <= now
+    !proVigente
   ) {
     return null;
   }
